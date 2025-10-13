@@ -1,0 +1,8 @@
+# Создай файл .env в папке legalbot/ с таким содержимым:
+
+TELEGRAM_BOT_TOKEN=твой_telegram_токен
+HUGGINGFACE_API_TOKEN=твой_huggingface_токен
+
+# Где взять токены:
+# 1. Telegram: @BotFather -> /newbot
+# 2. Hugging Face: https://huggingface.co/settings/tokens

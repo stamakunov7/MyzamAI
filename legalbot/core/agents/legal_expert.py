@@ -1,10 +1,10 @@
 """
 Legal Expert Agent - Interprets legal articles and provides analysis
+Uses centralized Meta Llama 3 from llm_manager
 """
 
-import torch
-from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 import logging
+from core.llm_manager import llama
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,52 +13,16 @@ logger = logging.getLogger(__name__)
 class LegalExpertAgent:
     """
     Agent that interprets legal texts and provides expert analysis
+    Uses shared Meta Llama 3 pipeline
     """
     
-    def __init__(self, model_name: str = "HuggingFaceH4/zephyr-7b-beta"):
+    def __init__(self):
         """
         Initialize Legal Expert Agent
-        
-        Args:
-            model_name: HuggingFace model for text generation
+        Uses centralized Llama 3 pipeline from llm_manager
         """
-        self.model_name = model_name
-        self.pipe = None
-        logger.info(f"Initializing Legal Expert Agent with model: {model_name}")
-        
-    def load_model(self):
-        """
-        Load the LLM model (lazy loading)
-        """
-        if self.pipe is None:
-            logger.info(f"Loading model: {self.model_name}")
-            
-            try:
-                # Load with reduced precision for better performance
-                self.pipe = pipeline(
-                    "text-generation",
-                    model=self.model_name,
-                    torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-                    device_map="auto" if torch.cuda.is_available() else None,
-                    max_new_tokens=512,
-                    do_sample=True,
-                    temperature=0.7,
-                    top_p=0.95,
-                )
-                logger.info("✓ Model loaded successfully")
-            except Exception as e:
-                logger.error(f"Failed to load model: {e}")
-                # Fallback to smaller model if main model fails
-                logger.info("Attempting fallback to smaller model...")
-                self.model_name = "microsoft/phi-2"
-                self.pipe = pipeline(
-                    "text-generation",
-                    model=self.model_name,
-                    max_new_tokens=512,
-                    do_sample=True,
-                    temperature=0.7,
-                )
-                logger.info("✓ Fallback model loaded")
+        self.llm = llama
+        logger.info("Legal Expert Agent initialized with Meta Llama 3")
     
     def interpret(self, query: str, legal_texts: str) -> str:
         """
@@ -71,39 +35,69 @@ class LegalExpertAgent:
         Returns:
             Expert interpretation
         """
-        self.load_model()
+        if self.llm is None:
+            logger.error("Llama 3 model not available")
+            return self._fallback_interpretation(query, legal_texts)
         
-        prompt = f"""<|system|>
-Ты юридический эксперт по гражданскому праву Кыргызской Республики. Твоя задача - дать четкий и понятный ответ на основе предоставленных законодательных статей.
-</s>
-<|user|>
+        # Ultra-strict prompt for concise legal answers
+        prompt = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Ты — опытный юрист-консультант, специализирующийся на гражданском праве Кыргызской Республики.
+Отвечай кратко (3–5 предложений максимум), строго по закону, используя только статьи из контекста ниже.
+Используй официальную юридическую терминологию: "взаимное согласие сторон", "в соответствии с", "правовые основания".
+
+❗Правила:
+- Не повторяй вопрос
+- Не включай нерелевантные статьи
+- Не дублируй одинаковые мысли
+- Не пиши «вопрос требует уточнения» — дай общий юридический ответ
+- Не вставляй "Вопрос:", "Статьи:" или любые заголовки в теле ответа
+- Пиши только одну статью, если она релевантна
+- НЕ используй скобки или другие символы разметки
+
+🚨 ВАЖНО: Если вопрос НЕ относится к Гражданскому кодексу (уголовное право, налоги, семейное право и т.д.):
+Ответ: Этот вопрос не относится к гражданскому праву КР. Обратитесь к [название кодекса] для получения информации.
+Совет: рекомендуется проконсультироваться с юристом по [тип права]
+[НЕ указывай "Основание" для вопросов вне компетенции!]
+
+⚙️ Формат ответа (строго):
+Ответ: краткий юридический ответ, максимум 2 предложения
+Основание: Статья номер, краткое описание правовой нормы [ТОЛЬКО если вопрос по ГК КР!]
+Совет: короткая практическая рекомендация, не более 15 слов
+
+✅ Пример правильного ответа (вопрос по ГК):
+Ответ: Трудовой договор может быть расторгнут досрочно при наличии взаимного согласия сторон. Изменение или прекращение договора допускается только по соглашению работника и работодателя.
+Основание: Статья 35 ГК КР регулирует порядок изменения условий трудового договора на основании взаимного согласия сторон
+Совет: рекомендуется оформить расторжение в письменной форме
+
+✅ Пример для вопроса ВНЕ компетенции:
+Ответ: Кража является уголовным преступлением и регулируется Уголовным кодексом КР, а не Гражданским кодексом.
+Совет: обратитесь к Уголовному кодексу КР или проконсультируйтесь с адвокатом<|eot_id|><|start_header_id|>user<|end_header_id|>
+
 Вопрос: {query}
 
-Релевантные статьи из Гражданского кодекса:
+Статьи Гражданского кодекса КР:
 {legal_texts}
 
-Предоставь юридический анализ, используя эти статьи. Объясни простым языком, что говорит закон по данному вопросу.
-</s>
-<|assistant|>
+Ответ:<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
 """
         
         try:
-            logger.info("Generating legal interpretation...")
-            response = self.pipe(
-                prompt,
-                max_new_tokens=400,
-                num_return_sequences=1,
-                pad_token_id=self.pipe.tokenizer.eos_token_id,
-            )
+            logger.info("Generating legal interpretation with Meta Llama 3...")
+            response = self.llm(prompt)
             
             # Extract generated text
-            generated = response[0]['generated_text']
+            result = response[0]["generated_text"]
             
             # Extract only the assistant's response
-            if "<|assistant|>" in generated:
-                answer = generated.split("<|assistant|>")[-1].strip()
+            if "<|start_header_id|>assistant<|end_header_id|>" in result:
+                answer = result.split("<|start_header_id|>assistant<|end_header_id|>")[-1].strip()
             else:
-                answer = generated.split(prompt)[-1].strip()
+                answer = result.split(prompt)[-1].strip()
+            
+            # Clean up any remaining tags
+            answer = answer.replace("<|eot_id|>", "").strip()
             
             logger.info("✓ Interpretation generated")
             return answer
@@ -134,7 +128,7 @@ class LegalExpertAgent:
 
 def main():
     """
-    Test the Legal Expert Agent
+    Test the Legal Expert Agent with Meta Llama 3
     """
     agent = LegalExpertAgent()
     
@@ -144,7 +138,7 @@ def main():
     
     result = agent.interpret(query, legal_text)
     print("=" * 60)
-    print("Legal Expert Response:")
+    print("Legal Expert Response (Meta Llama 3):")
     print("=" * 60)
     print(result)
 

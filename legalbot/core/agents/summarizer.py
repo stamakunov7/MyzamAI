@@ -1,10 +1,10 @@
 """
 Summarizer Agent - Condenses long legal texts into concise summaries
+Uses centralized Meta Llama 3 from llm_manager
 """
 
-import torch
-from transformers import pipeline
 import logging
+from core.llm_manager import llama
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,38 +13,16 @@ logger = logging.getLogger(__name__)
 class SummarizerAgent:
     """
     Agent that summarizes long legal texts for better readability
+    Uses shared Meta Llama 3 pipeline
     """
     
-    def __init__(self, model_name: str = "HuggingFaceH4/zephyr-7b-beta"):
+    def __init__(self):
         """
         Initialize Summarizer Agent
-        
-        Args:
-            model_name: HuggingFace model for summarization
+        Uses centralized Llama 3 pipeline from llm_manager
         """
-        self.model_name = model_name
-        self.pipe = None
-        logger.info("Summarizer Agent initialized")
-    
-    def load_model(self):
-        """
-        Load the summarization model (lazy loading)
-        """
-        if self.pipe is None:
-            logger.info(f"Loading summarization model: {self.model_name}")
-            
-            try:
-                self.pipe = pipeline(
-                    "text-generation",
-                    model=self.model_name,
-                    torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-                    device_map="auto" if torch.cuda.is_available() else None,
-                    max_new_tokens=300,
-                )
-                logger.info("✓ Summarization model loaded")
-            except Exception as e:
-                logger.error(f"Failed to load model: {e}")
-                self.pipe = None
+        self.llm = llama
+        logger.info("Summarizer Agent initialized with Meta Llama 3")
     
     def summarize(self, text: str, max_length: int = 250) -> str:
         """
@@ -62,40 +40,46 @@ class SummarizerAgent:
             logger.info("Text is already concise, skipping summarization")
             return text
         
-        self.load_model()
-        
-        if self.pipe is None:
-            logger.warning("Model not available, using extractive summarization")
+        if self.llm is None:
+            logger.warning("Llama 3 not available, using extractive summarization")
             return self._extractive_summarize(text, max_length)
         
-        prompt = f"""<|system|>
-Ты помощник, который создает краткие и точные резюме юридических текстов. Сохраняй все важные детали и юридические термины.
-</s>
-<|user|>
-Сократи следующий текст, сохранив все ключевые юридические положения:
+        # Strict editor prompt for legal summaries
+        prompt = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>
 
+Ты — редактор юридических ответов.
+Твоя задача — сократить текст до 3–5 предложений, сохранив юридическую суть и формулировки закона.
+Удали дубли, воду и все не относящиеся фразы.
+Не меняй структуру "Ответ:", "Основание:", "Совет:".
+Сделай язык простым, но профессиональным.
+Используй официальную юридическую терминологию: "взаимное согласие сторон", "в соответствии с законом", "правовые основания".
+НЕ добавляй скобки, кавычки или другие символы разметки.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+Текст:
 {text}
 
-Краткое резюме:
-</s>
-<|assistant|>
+Краткое резюме:<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
 """
         
         try:
-            logger.info("Generating summary...")
-            response = self.pipe(
-                prompt,
-                max_new_tokens=max_length,
-                num_return_sequences=1,
-                pad_token_id=self.pipe.tokenizer.eos_token_id,
-            )
+            logger.info("Generating summary with Meta Llama 3...")
+            response = self.llm(prompt)
             
-            generated = response[0]['generated_text']
+            # Extract generated text
+            result = response[0]["generated_text"]
             
-            if "<|assistant|>" in generated:
-                summary = generated.split("<|assistant|>")[-1].strip()
+            if "<|start_header_id|>assistant<|end_header_id|>" in result:
+                summary = result.split("<|start_header_id|>assistant<|end_header_id|>")[-1].strip()
             else:
-                summary = generated.split(prompt)[-1].strip()
+                summary = result.split(prompt)[-1].strip()
+            
+            # Clean up tags
+            summary = summary.replace("<|eot_id|>", "").strip()
+            
+            # Truncate if needed
+            if len(summary) > max_length:
+                summary = summary[:max_length] + "..."
             
             logger.info("✓ Summary generated")
             return summary

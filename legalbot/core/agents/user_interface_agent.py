@@ -39,44 +39,84 @@ class UserInterfaceAgent:
         """
         logger.info("Formatting response for user...")
         
-        # Build the response
+        # Parse the legal interpretation to extract structured parts
+        # Expected format: "Ответ: ... Основание: ... Совет: ..."
+        
+        # Create clean formatted response for Telegram with bold/italic
         response_parts = []
         
-        # Header with emoji
-        response_parts.append("⚖️ **Юридическая консультация**\n")
+        # Check if this is out-of-scope question (not civil law)
+        is_out_of_scope = any(keyword in legal_interpretation.lower() for keyword in [
+            "уголовн", "налог", "семейн", "не относится к гражданскому праву",
+            "обратитесь к", "кодекс", "вне компетенции"
+        ])
         
-        # Question recap
-        response_parts.append(f"**Ваш вопрос:**\n_{query}_\n")
+        # Header with emoji (bold) - Notion AI style
+        if is_out_of_scope:
+            response_parts.append("ℹ️ **Информация**\n")
+        else:
+            response_parts.append("⚖️ **Информационно-правовой ответ**\n")
         
-        # Main interpretation
-        response_parts.append(f"**Ответ:**\n{legal_interpretation}\n")
+        # Add separator line
+        response_parts.append("━━━━━━━━━━━━━━━━━━━\n")
         
-        # Source references
-        if source_articles and len(source_articles) > 0:
-            response_parts.append("\n📚 **Правовая основа:**")
-            for i, article in enumerate(source_articles[:3], 1):
-                # Extract article number if present
-                article_preview = article[:150] + "..." if len(article) > 150 else article
-                response_parts.append(f"{i}. {article_preview}")
-            response_parts.append("")
+        # Check if the interpretation already has structure
+        if "Ответ:" in legal_interpretation:
+            # Parse structured response and format beautifully
+            lines = legal_interpretation.split('\n')
+            formatted_lines = []
+            
+            for line in lines:
+                line = line.strip()
+                if line.startswith("Ответ:"):
+                    # Clean up the answer text
+                    answer_text = line.replace("Ответ:", "").strip()
+                    formatted_lines.append("✅ **Ответ:**")
+                    formatted_lines.append(answer_text)
+                    formatted_lines.append("")  # Empty line
+                elif line.startswith("Основание:"):
+                    # Clean up the foundation text
+                    foundation_text = line.replace("Основание:", "").strip()
+                    formatted_lines.append("📚 **Основание:**")
+                    formatted_lines.append(f"_{foundation_text}_")
+                    formatted_lines.append("")  # Empty line
+                elif line.startswith("Совет:"):
+                    # Clean up the advice text and capitalize first letter
+                    advice_text = line.replace("Совет:", "").strip()
+                    # Capitalize first letter
+                    if advice_text:
+                        advice_text = advice_text[0].upper() + advice_text[1:]
+                    formatted_lines.append("💡 **Совет:**")
+                    formatted_lines.append(advice_text)
+                elif line and not line.startswith("Ответ:") and not line.startswith("Основание:") and not line.startswith("Совет:"):
+                    # Additional text that doesn't fit the structure
+                    formatted_lines.append(line)
+            
+            response_parts.append("\n".join(formatted_lines))
+        else:
+            # Not structured, add basic formatting
+            response_parts.append(f"**Ответ:**\n{legal_interpretation}\n")
+            
+            # Add source if provided
+            if source_articles and len(source_articles) > 0:
+                response_parts.append(f"\n📚 **Основание:**\n_{source_articles[0][:200]}_")
         
-        # Practical tips
-        response_parts.append("💡 **Рекомендации:**")
-        tips = self._generate_tips(query, legal_interpretation)
-        response_parts.append(tips)
+        # Add bottom separator
+        response_parts.append("\n━━━━━━━━━━━━━━━━━━━")
         
-        # Legal disclaimer
+        # Legal disclaimer (italic) - Notion AI style
         if include_disclaimer:
-            response_parts.append("\n⚠️ _Данная информация носит справочный характер. Для получения персональной юридической консультации обратитесь к квалифицированному юристу._")
+            response_parts.append("\n⚠️ _Ответ предоставлен в информационных целях и не является юридической консультацией._")
         
-        # Footer
-        response_parts.append(f"\n🤖 LegalBot+ | {datetime.now().strftime('%d.%m.%Y %H:%M')}")
+        # Footer with timestamp
+        timestamp = datetime.now().strftime('%d.%m.%Y %H:%M')
+        response_parts.append(f"\n🤖 *MyzamAI | {timestamp}*")
         
         formatted_response = "\n".join(response_parts)
         
         # Ensure Telegram message length limit (4096 characters)
         if len(formatted_response) > 4000:
-            formatted_response = formatted_response[:3900] + "\n\n... [текст сокращен]\n\n" + response_parts[-2] + "\n" + response_parts[-1]
+            formatted_response = formatted_response[:3900] + "\n\n⚠️ Ответ предоставлен в информационных целях и не является юридической консультацией.\n\n🤖 MyzamAI | " + timestamp
         
         logger.info("✓ Response formatted successfully")
         return formatted_response
@@ -123,20 +163,31 @@ class UserInterfaceAgent:
         Returns:
             User-friendly error message
         """
-        return f"""❌ **Ошибка**
+        timestamp = datetime.now().strftime('%d.%m.%Y %H:%M')
+        
+        # Make error messages more user-friendly
+        friendly_message = error_message
+        if "Broken pipe" in error_message or "Errno 32" in error_message:
+            friendly_message = "Временная проблема с подключением к сервису. Попробуйте через несколько секунд."
+        elif "Conflict" in error_message or "getUpdates" in error_message:
+            friendly_message = "Бот перезапускается. Подождите несколько секунд и попробуйте снова."
+        elif "timeout" in error_message.lower():
+            friendly_message = "Превышено время ожидания ответа. Попробуйте позже."
+        
+        return f"""❌ *Временная ошибка*
 
-К сожалению, произошла ошибка при обработке вашего запроса.
+К сожалению, не удалось обработать ваш запрос.
 
-**Детали:** {error_message}
+*Причина:* {friendly_message}
 
-Пожалуйста, попробуйте:
-• Переформулировать вопрос
-• Использовать команду /help для справки
-• Попробовать позже
+💡 *Что делать:*
+• Подождите 10-15 секунд и попробуйте снова
+• Попробуйте переформулировать вопрос
+• Используйте /help для справки
 
-Если проблема сохраняется, обратитесь в поддержку.
+⚠️ Если проблема повторяется - бот может быть временно недоступен.
 
-🤖 LegalBot+"""
+🤖 MyzamAI | {timestamp}"""
     
     def format_welcome(self) -> str:
         """
@@ -145,28 +196,29 @@ class UserInterfaceAgent:
         Returns:
             Welcome message
         """
-        return """👋 **Добро пожаловать в LegalBot+**
+        return """👋 *Добро пожаловать в MyzamAI*
 
-Я ваш AI-помощник по гражданскому праву Кыргызской Республики.
+Я ваш AI-ассистент по гражданскому праву Кыргызской Республики.
 
-**Что я умею:**
+*Что я умею:*
 ⚖️ Отвечать на юридические вопросы
 📚 Находить релевантные статьи закона
 💡 Давать практические рекомендации
 🔄 Работать на русском и английском языках
 
-**Как пользоваться:**
-Просто напишите ваш вопрос, например:
-_"Могу ли я вернуть товар без чека?"_
+*Примеры вопросов:*
+• "Как правильно заключить договор аренды?"
+• "Можно ли расторгнуть трудовой договор досрочно?"
+• "Какие права у покупателя при возврате товара?"
 
-**Команды:**
+*Команды:*
 /start - начать работу
-/help - справка
+/help - подробная справка
 /law <номер> - получить конкретную статью
 
-⚠️ Помните: бот предоставляет справочную информацию, не заменяющую профессиональную юридическую консультацию.
+⚠️ *Важно:* Я специализируюсь на гражданском праве КР. Вопросы по уголовному, налоговому или семейному праву — вне моей компетенции.
 
-🤖 Готов ответить на ваши вопросы!"""
+🤖 MyzamAI v1.0 | Powered by Meta Llama 3"""
     
     def format_help(self) -> str:
         """
@@ -175,35 +227,37 @@ _"Могу ли я вернуть товар без чека?"_
         Returns:
             Help message
         """
-        return """📖 **Справка по использованию LegalBot+**
+        return """📖 *Справка по использованию MyzamAI*
 
-**Основные команды:**
+*Основные команды:*
 /start - перезапустить бота
 /help - показать эту справку
 /law <номер> - получить текст конкретной статьи
 
-**Как задавать вопросы:**
-✅ Хорошие вопросы:
+*Как задавать вопросы:*
+✅ Хорошие примеры:
 • "Какие права у покупателя при возврате товара?"
 • "Можно ли расторгнуть трудовой договор досрочно?"
 • "Что нужно для вступления в наследство?"
 
-❌ Плохие вопросы:
+❌ Плохие примеры:
 • "Помоги" (слишком общий)
 • "!!!" (не информативно)
 
-**Языки:**
-Бот понимает русский и английский языки.
+*О боте:*
+🤖 MyzamAI - AI-ассистент по гражданскому праву КР
+⚡ Работает на базе Meta Llama 3
+📚 База: Гражданский кодекс КР
 
-**Ограничения:**
-• Бот основан на Гражданском кодексе КР
+*Важно:*
 • Информация носит справочный характер
 • Не заменяет консультацию юриста
+• Вопросы по уголовному/семейному праву - вне компетенции
 
-**Поддержка:**
-По вопросам и предложениям: @support
+*Языки:*
+Бот понимает русский и английский
 
-🤖 LegalBot+ v1.0"""
+🤖 MyzamAI v1.0 | Powered by Meta Llama 3"""
 
 
 def main():

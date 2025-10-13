@@ -1,5 +1,5 @@
 """
-LegalBot+ Main Telegram Bot
+MyzamAI Main Telegram Bot
 Multi-agent orchestration for legal question answering
 """
 
@@ -13,6 +13,15 @@ from typing import Optional
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
+# Import configuration with .env support
+try:
+    import config
+    TELEGRAM_BOT_TOKEN = config.TELEGRAM_BOT_TOKEN
+except (ImportError, ValueError) as e:
+    TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+    if not TELEGRAM_BOT_TOKEN:
+        logger.warning(f"Configuration error: {e}")
 
 from telegram import Update
 from telegram.ext import (
@@ -53,7 +62,7 @@ class LegalBotOrchestrator:
         Args:
             index_dir: Directory containing FAISS index
         """
-        logger.info("Initializing LegalBot+ Orchestrator...")
+        logger.info("Initializing MyzamAI Orchestrator...")
         
         # Initialize all agents
         self.retriever = LawRetriever(index_dir)
@@ -224,7 +233,7 @@ class LegalBotOrchestrator:
 
 class TelegramBot:
     """
-    Telegram bot interface for LegalBot+
+    Telegram bot interface for MyzamAI
     """
     
     def __init__(self, token: str, orchestrator: LegalBotOrchestrator):
@@ -318,7 +327,7 @@ class TelegramBot:
         """
         Start the bot
         """
-        logger.info("🚀 Starting LegalBot+...")
+        logger.info("🚀 Starting MyzamAI...")
         self.application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
@@ -338,12 +347,10 @@ def main():
         )
         sys.exit(1)
     
-    # Get Telegram token from environment
-    bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
-    
-    if not bot_token:
-        logger.warning("TELEGRAM_BOT_TOKEN not found in environment variables")
-        logger.info("Please set your token: export TELEGRAM_BOT_TOKEN='your_token_here'")
+    # Check if bot token is available
+    if not TELEGRAM_BOT_TOKEN:
+        logger.warning("TELEGRAM_BOT_TOKEN not found!")
+        logger.info("Please set your token in .env file or as environment variable")
         logger.info("\nFor testing without Telegram, you can use the orchestrator directly:")
         
         # Demo mode
@@ -364,7 +371,7 @@ def main():
     
     # Initialize orchestrator and bot
     orchestrator = LegalBotOrchestrator(index_dir)
-    bot = TelegramBot(bot_token, orchestrator)
+    bot = TelegramBot(TELEGRAM_BOT_TOKEN, orchestrator)
     
     # Run bot
     bot.run()

@@ -1,10 +1,10 @@
 """
 Reviewer Agent - Checks quality and accuracy of legal responses
+Uses centralized Meta Llama 3 from llm_manager
 """
 
-import torch
-from transformers import pipeline
 import logging
+from core.llm_manager import llama
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -14,39 +14,17 @@ class ReviewerAgent:
     """
     Agent that reviews legal responses for accuracy and completeness
     Performs self-correction loop if needed
+    Uses shared Meta Llama 3 pipeline
     """
     
-    def __init__(self, model_name: str = "HuggingFaceH4/zephyr-7b-beta"):
+    def __init__(self):
         """
         Initialize Reviewer Agent
-        
-        Args:
-            model_name: HuggingFace model for review
+        Uses centralized Llama 3 pipeline from llm_manager
         """
-        self.model_name = model_name
-        self.pipe = None
+        self.llm = llama
         self.review_log = []
-        logger.info("Reviewer Agent initialized")
-    
-    def load_model(self):
-        """
-        Load the review model (lazy loading)
-        """
-        if self.pipe is None:
-            logger.info(f"Loading review model: {self.model_name}")
-            
-            try:
-                self.pipe = pipeline(
-                    "text-generation",
-                    model=self.model_name,
-                    torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-                    device_map="auto" if torch.cuda.is_available() else None,
-                    max_new_tokens=300,
-                )
-                logger.info("✓ Review model loaded")
-            except Exception as e:
-                logger.error(f"Failed to load model: {e}")
-                self.pipe = None
+        logger.info("Reviewer Agent initialized with Meta Llama 3")
     
     def review(self, query: str, legal_texts: str, response: str) -> dict:
         """
@@ -78,8 +56,8 @@ class ReviewerAgent:
                 'corrected_response': response
             }
         
-        # Deep review using LLM (optional, can be disabled for performance)
-        if self.pipe:
+        # Deep review using Llama 3 (optional, can be disabled for performance)
+        if self.llm:
             llm_review = self._llm_review(query, legal_texts, response)
             return llm_review
         
@@ -129,7 +107,7 @@ class ReviewerAgent:
     
     def _llm_review(self, query: str, legal_texts: str, response: str) -> dict:
         """
-        Deep review using LLM
+        Deep review using Meta Llama 3
         
         Args:
             query: User query
@@ -139,12 +117,21 @@ class ReviewerAgent:
         Returns:
             Review result dict
         """
-        self.load_model()
-        
-        prompt = f"""<|system|>
-Ты эксперт по контролю качества юридических консультаций. Оцени предоставленный ответ на юридический вопрос.
-</s>
-<|user|>
+        # Strict reviewer prompt
+        prompt = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+Ты — юридический редактор.
+Проверь следующий ответ юриста на корректность и точность.
+Исправь только если:
+- указана неверная статья закона
+- есть логическая ошибка
+- текст слишком длинный или повторяет себя
+- используются неофициальные формулировки (замени на "взаимное согласие сторон", "в соответствии с законом")
+
+Сохрани структуру "Ответ:", "Основание:", "Совет:" без изменений.
+Убери любые скобки, кавычки или символы разметки.
+Если всё верно — верни ответ без изменений.<|eot_id|><|start_header_id|>user<|end_header_id|>
+
 Вопрос пользователя: {query}
 
 Юридические статьи:
@@ -153,37 +140,30 @@ class ReviewerAgent:
 Предоставленный ответ:
 {response}
 
-Оцени этот ответ по следующим критериям:
-1. Точность (соответствует ли ответ законодательству?)
-2. Полнота (отвечает ли на вопрос?)
-3. Ясность (понятен ли ответ?)
-
 Ответь в формате:
 ОДОБРЕНО: Да/Нет
-ЗАМЕЧАНИЯ: [если есть]
-</s>
-<|assistant|>
+ЗАМЕЧАНИЯ: [если есть]<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
 """
         
         try:
-            result = self.pipe(
-                prompt,
-                max_new_tokens=150,
-                num_return_sequences=1,
-                pad_token_id=self.pipe.tokenizer.eos_token_id,
-            )
+            result = self.llm(prompt)
             
-            generated = result[0]['generated_text']
+            # Extract generated text
+            generated = result[0]["generated_text"]
             
-            if "<|assistant|>" in generated:
-                review_text = generated.split("<|assistant|>")[-1].strip()
+            if "<|start_header_id|>assistant<|end_header_id|>" in generated:
+                review_text = generated.split("<|start_header_id|>assistant<|end_header_id|>")[-1].strip()
             else:
                 review_text = generated.split(prompt)[-1].strip()
+            
+            # Clean up tags
+            review_text = review_text.replace("<|eot_id|>", "").strip()
             
             # Parse review
             approved = 'да' in review_text.lower()[:100] or 'одобрено: да' in review_text.lower()
             
-            logger.info(f"✓ LLM review completed. Approved: {approved}")
+            logger.info(f"✓ Llama 3 review completed. Approved: {approved}")
             
             return {
                 'approved': approved,
@@ -192,7 +172,7 @@ class ReviewerAgent:
             }
             
         except Exception as e:
-            logger.error(f"LLM review error: {e}")
+            logger.error(f"Llama 3 review error: {e}")
             return {
                 'approved': True,
                 'feedback': 'Review system unavailable, accepting response',

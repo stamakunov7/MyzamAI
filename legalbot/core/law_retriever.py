@@ -73,18 +73,39 @@ class LawRetriever:
         query_vector = self.model.encode([query])
         query_vector = np.array(query_vector).astype('float32')
         
-        # Search in FAISS index
-        distances, indices = self.index.search(query_vector, top_k)
+        # Search in FAISS index (get more results for filtering)
+        distances, indices = self.index.search(query_vector, top_k * 2)
         
-        # Prepare results
+        # Prepare results with relevance filtering
         results = []
+        query_words = [word.lower() for word in query.split() if len(word) > 3]
+        
         for idx, distance in zip(indices[0], distances[0]):
             if idx < len(self.chunks):
                 chunk = self.chunks[idx]
-                similarity = 1 / (1 + distance)  # Convert distance to similarity
-                results.append((chunk, similarity))
+                chunk_lower = chunk.lower()
+                
+                # Check if chunk contains key words from query
+                relevance_score = sum(1 for word in query_words if word in chunk_lower)
+                
+                # Only include if at least one key word matches or it's in top 2 by similarity
+                if relevance_score > 0 or len(results) < 2:
+                    similarity = 1 / (1 + distance)  # Convert distance to similarity
+                    results.append((chunk, similarity))
+                
+                # Stop when we have enough relevant results
+                if len(results) >= top_k:
+                    break
         
-        return results
+        # If no results passed the filter, return top 2 by similarity
+        if not results:
+            for idx, distance in zip(indices[0][:2], distances[0][:2]):
+                if idx < len(self.chunks):
+                    chunk = self.chunks[idx]
+                    similarity = 1 / (1 + distance)
+                    results.append((chunk, similarity))
+        
+        return results[:top_k]
     
     def format_results(self, results: List[Tuple[str, float]]) -> str:
         """

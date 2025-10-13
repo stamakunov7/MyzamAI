@@ -1,10 +1,24 @@
-transformers>=4.35.0
-torch>=2.0.0
-faiss-cpu>=1.7.4
-langchain>=0.1.0
-python-telegram-bot>=20.0
-sentence-transformers>=2.2.0
+# Core dependencies for MyzamAI
+# Note: We use Hugging Face API for LLM (no local model loading!)
+# Only sentence-transformers needs torch (for FAISS embeddings)
+
+# Hugging Face API client (main LLM interface)
 huggingface_hub>=0.19.0
+
+# Telegram Bot
+python-telegram-bot>=20.0
+
+# FAISS for document retrieval
+faiss-cpu>=1.7.4
+sentence-transformers>=2.2.0
 numpy>=1.24.0
+
+# Utilities
+langchain>=0.1.0
 langdetect>=1.0.9
+python-dotenv>=1.0.0
+
+# PDF processing
+PyPDF2>=3.0.0
+PyMuPDF>=1.23.0
 
