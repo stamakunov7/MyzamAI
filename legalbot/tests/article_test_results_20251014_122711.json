@@ -1,0 +1,108 @@
+[
+  {
+    "article": 1,
+    "status": "PASS",
+    "message": "Found 1 correct matches",
+    "correct_matches": 1,
+    "wrong_matches": 0,
+    "total_matches": 1
+  },
+  {
+    "article": 2,
+    "status": "NOT_FOUND",
+    "message": "Article not found in database",
+    "matches": 0
+  },
+  {
+    "article": 3,
+    "status": "PASS",
+    "message": "Found 3 correct matches",
+    "correct_matches": 3,
+    "wrong_matches": 0,
+    "total_matches": 3
+  },
+  {
+    "article": 4,
+    "status": "PASS",
+    "message": "Found 2 correct matches",
+    "correct_matches": 2,
+    "wrong_matches": 0,
+    "total_matches": 2
+  },
+  {
+    "article": 5,
+    "status": "PASS",
+    "message": "Found 2 correct matches",
+    "correct_matches": 2,
+    "wrong_matches": 0,
+    "total_matches": 2
+  },
+  {
+    "article": 22,
+    "status": "PASS",
+    "message": "Found 2 correct matches",
+    "correct_matches": 2,
+    "wrong_matches": 0,
+    "total_matches": 2
+  },
+  {
+    "article": 222,
+    "status": "NOT_FOUND",
+    "message": "Article not found in database",
+    "matches": 0
+  },
+  {
+    "article": 379,
+    "status": "PASS",
+    "message": "Found 2 correct matches",
+    "correct_matches": 2,
+    "wrong_matches": 0,
+    "total_matches": 2
+  },
+  {
+    "article": 380,
+    "status": "PASS",
+    "message": "Found 2 correct matches",
+    "correct_matches": 2,
+    "wrong_matches": 0,
+    "total_matches": 2
+  },
+  {
+    "article": 381,
+    "status": "PASS",
+    "message": "Found 2 correct matches",
+    "correct_matches": 2,
+    "wrong_matches": 0,
+    "total_matches": 2
+  },
+  {
+    "article": 382,
+    "status": "NOT_FOUND",
+    "message": "Article not found in database",
+    "matches": 0
+  },
+  {
+    "article": 383,
+    "status": "PASS",
+    "message": "Found 2 correct matches",
+    "correct_matches": 2,
+    "wrong_matches": 0,
+    "total_matches": 2
+  },
+  {
+    "article": 384,
+    "status": "PASS",
+    "message": "Found 2 correct matches",
+    "correct_matches": 2,
+    "wrong_matches": 0,
+    "total_matches": 2
+  },
+  {
+    "article": 385,
+    "status": "PASS",
+    "message": "Found 2 correct matches",
+    "correct_matches": 2,
+    "wrong_matches": 0,
+    "total_matches": 2
+  }
+]

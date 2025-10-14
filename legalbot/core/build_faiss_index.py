@@ -95,13 +95,12 @@ class FAISSIndexBuilder:
         
         print(f"Found {len(articles)} articles")
         
-        # Chunk each article if needed
+        # Use articles as chunks directly (no further chunking needed)
         all_chunks = []
         for article in articles:
-            if len(article) > 700:
-                chunks = self.chunk_text(article, chunk_size=700, overlap=100)
-                all_chunks.extend(chunks)
-            else:
+            # Clean up article text
+            article = article.strip()
+            if article and len(article) > 10:  # Only include non-empty articles
                 all_chunks.append(article)
         
         print(f"Total chunks after processing: {len(all_chunks)}")
@@ -172,7 +171,8 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     
-    data_path = os.path.join(project_root, 'data', 'civil_code.txt')
+    # Use the new full civil code file from PDF processing
+    data_path = os.path.join(project_root, 'data', 'civil_code_full.txt')
     save_dir = os.path.join(project_root, 'faiss_index')
     
     print("=" * 60)

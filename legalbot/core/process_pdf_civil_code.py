@@ -34,22 +34,54 @@ class CivilCodePDFProcessor:
         
     def extract_text_from_pdf(self, pdf_path: str) -> str:
         """
-        Extract text from PDF using PyMuPDF (fitz)
+        Extract text from PDF using PyMuPDF (fitz) with better error handling
         """
         logger.info(f"Extracting text from {pdf_path}...")
         
         try:
-            doc = fitz.open(pdf_path)
+            # Try to open with different methods
+            doc = None
             text = ""
             
-            for page_num in range(doc.page_count):
-                page = doc[page_num]
-                text += page.get_text()
-                text += "\n"  # Add page break
+            # Method 1: Try PyMuPDF (fitz)
+            try:
+                doc = fitz.open(pdf_path)
+                logger.info(f"✓ Opened PDF with PyMuPDF: {doc.page_count} pages")
                 
-            doc.close()
-            logger.info(f"✓ Extracted text from {doc.page_count} pages")
-            return text
+                for page_num in range(doc.page_count):
+                    page = doc[page_num]
+                    page_text = page.get_text()
+                    if page_text.strip():  # Only add non-empty pages
+                        text += page_text
+                        text += "\n"  # Add page break
+                
+                doc.close()
+                logger.info(f"✓ Extracted text from {doc.page_count} pages")
+                return text
+                
+            except Exception as e1:
+                logger.warning(f"PyMuPDF failed: {e1}")
+                
+                # Method 2: Try PyPDF2 as fallback
+                try:
+                    import PyPDF2
+                    with open(pdf_path, 'rb') as file:
+                        pdf_reader = PyPDF2.PdfReader(file)
+                        logger.info(f"✓ Opened PDF with PyPDF2: {len(pdf_reader.pages)} pages")
+                        
+                        for page_num in range(len(pdf_reader.pages)):
+                            page = pdf_reader.pages[page_num]
+                            page_text = page.extract_text()
+                            if page_text.strip():  # Only add non-empty pages
+                                text += page_text
+                                text += "\n"
+                        
+                        logger.info(f"✓ Extracted text from {len(pdf_reader.pages)} pages")
+                        return text
+                        
+                except Exception as e2:
+                    logger.error(f"PyPDF2 also failed: {e2}")
+                    return ""
             
         except Exception as e:
             logger.error(f"Error extracting from {pdf_path}: {e}")
@@ -57,36 +89,111 @@ class CivilCodePDFProcessor:
     
     def parse_articles(self, text: str) -> List[Dict[str, str]]:
         """
-        Parse articles from extracted text
+        Parse articles from extracted text with improved patterns
         """
         logger.info("Parsing articles from text...")
         
         articles = []
         
-        # Pattern to match article numbers and content
-        # Look for patterns like "Статья 1.", "Статья 2.", etc.
-        article_pattern = r'Статья\s+(\d+)[\.\s]*(.*?)(?=Статья\s+\d+|\Z)'
+        # Split text into lines for better processing
+        lines = text.split('\n')
+        current_article = None
+        current_content = []
         
-        matches = re.finditer(article_pattern, text, re.DOTALL | re.MULTILINE)
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+                
+            # Check if this line starts a new article
+            article_match = re.match(r'^Статья\s+(\d+)', line, re.IGNORECASE)
+            if article_match:
+                # Save previous article if exists
+                if current_article is not None and current_content:
+                    content = ' '.join(current_content).strip()
+                    # Clean up content - remove chapter headers and other artifacts
+                    content = self._clean_article_content(content)
+                    if content and len(content) > 20:
+                        articles.append({
+                            'number': current_article,
+                            'title': f"Статья {current_article}",
+                            'content': content,
+                            'source': f"Гражданский кодекс КР, статья {current_article}"
+                        })
+                
+                # Start new article
+                current_article = int(article_match.group(1))
+                current_content = [line]
+            else:
+                # Add to current article content
+                if current_article is not None:
+                    current_content.append(line)
         
-        for match in matches:
-            article_num = match.group(1)
-            content = match.group(2).strip()
-            
-            # Clean up content
-            content = re.sub(r'\s+', ' ', content)  # Normalize whitespace
-            content = content.replace('\n', ' ').strip()
-            
-            if content and len(content) > 10:  # Filter out empty or very short articles
+        # Don't forget the last article
+        if current_article is not None and current_content:
+            content = ' '.join(current_content).strip()
+            if content and len(content) > 20:
                 articles.append({
-                    'number': int(article_num),
-                    'title': f"Статья {article_num}",
+                    'number': current_article,
+                    'title': f"Статья {current_article}",
                     'content': content,
-                    'source': f"Гражданский кодекс КР, статья {article_num}"
+                    'source': f"Гражданский кодекс КР, статья {current_article}"
                 })
+        
+        # Sort by article number
+        articles.sort(key=lambda x: x['number'])
         
         logger.info(f"✓ Parsed {len(articles)} articles")
         return articles
+    
+    def _clean_article_content(self, content: str) -> str:
+        """
+        Clean article content by removing chapter headers and other artifacts
+        """
+        # Remove chapter headers and section titles
+        patterns_to_remove = [
+            r'Глава \d+.*?$',
+            r'Параграф \d+.*?$',
+            r'Раздел \d+.*?$',
+            r'Имущественный наем.*?$',
+            r'Общие положения.*?$',
+            r'Договор.*?найма.*?$'
+        ]
+        
+        for pattern in patterns_to_remove:
+            content = re.sub(pattern, '', content, flags=re.MULTILINE | re.IGNORECASE)
+        
+        # Remove extra whitespace
+        content = re.sub(r'\s+', ' ', content).strip()
+        
+        # Remove content that appears to be from next chapter
+        # Look for patterns that indicate chapter boundaries
+        chapter_boundaries = [
+            'Глава', 'Параграф', 'Раздел', 'Имущественный наем', 'Общие положения'
+        ]
+        
+        # Find the last occurrence of article content before chapter headers
+        for boundary in chapter_boundaries:
+            if boundary in content:
+                # Find the position of the boundary
+                pos = content.find(boundary)
+                if pos > 0:
+                    # Keep only content before the boundary
+                    content = content[:pos].strip()
+                    break
+        
+        # Remove next article if it's included in the same chunk
+        # Look for "Статья" followed by a number that's not the current article
+        article_pattern = r'Статья \d+'
+        matches = list(re.finditer(article_pattern, content))
+        
+        if len(matches) > 1:
+            # Keep only the first article (the requested one)
+            first_match = matches[0]
+            second_match = matches[1]
+            content = content[:second_match.start()].strip()
+        
+        return content
     
     def process_pdf_file(self, pdf_path: str) -> List[Dict[str, str]]:
         """

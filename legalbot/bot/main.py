@@ -149,11 +149,13 @@ class LegalBotOrchestrator:
             detected_lang = self.translator.detect_language(query)
             logger.info(f"Detected language: {detected_lang}")
             
-            # Step 2: Translate to Russian if needed
+            # Step 2: Check language support
+            if detected_lang != 'ru':
+                return self.ui_agent.format_error(
+                    "Извините, я работаю только на русском языке. Пожалуйста, задайте вопрос на русском языке."
+                )
+            
             query_ru = query
-            if detected_lang == 'en':
-                logger.info("Translating query to Russian...")
-                query_ru = self.translator.translate_en_to_ru(query)
             
             # Step 3: Retrieve relevant legal articles
             logger.info("Retrieving relevant legal articles...")
@@ -221,14 +223,131 @@ class LegalBotOrchestrator:
             Article text or None
         """
         try:
-            # Search for article in chunks
-            results = self.retriever.search(f"Статья {article_num}", top_k=1)
-            if results:
-                return results[0][0]
+            # Load chunks directly and search for exact match
+            if not hasattr(self.retriever, 'chunks') or self.retriever.chunks is None:
+                self.retriever.load()
+            
+            # Collect all parts of the article with STRICT matching
+            article_parts = []
+            for chunk in self.retriever.chunks:
+                chunk_clean = chunk.strip()
+                # STRICT: Must start with exact "Статья {article_num}" pattern
+                if chunk_clean.startswith(f"Статья {article_num}"):
+                    # Additional validation: ensure it's not a partial match
+                    # Check that the next character after the number is not a digit
+                    pattern = f"Статья {article_num}"
+                    if len(chunk_clean) > len(pattern):
+                        next_char = chunk_clean[len(pattern)]
+                        if next_char.isdigit():
+                            # This is a partial match (e.g., "Статья 37" matches "Статья 379")
+                            continue
+                    article_parts.append(chunk_clean)
+            
+            if article_parts:
+                # Combine all parts and clean up
+                full_article = self._combine_article_parts(article_parts)
+                # Final validation: ensure the result starts with the correct article
+                if full_article.strip().startswith(f"Статья {article_num}"):
+                    return full_article
+                else:
+                    logger.warning(f"Article {article_num} found but validation failed")
+                    return None
+            
+            # If not found, try FAISS search as fallback with STRICT validation
+            results = self.retriever.search(f"Статья {article_num}", top_k=20)
+            for chunk, score in results:
+                chunk_clean = chunk.strip()
+                # STRICT validation for FAISS results too
+                if chunk_clean.startswith(f"Статья {article_num}"):
+                    # Additional validation for FAISS results
+                    pattern = f"Статья {article_num}"
+                    if len(chunk_clean) > len(pattern):
+                        next_char = chunk_clean[len(pattern)]
+                        if next_char.isdigit():
+                            continue
+                    # Final check: ensure it's the exact article
+                    if chunk_clean.startswith(f"Статья {article_num}"):
+                        logger.info(f"Found article {article_num} via FAISS search with score {score}")
+                        return chunk_clean
+            
+            logger.warning(f"Article {article_num} not found in database")
             return None
         except Exception as e:
-            logger.error(f"Error retrieving article: {e}")
+            logger.error(f"Error retrieving article {article_num}: {e}")
             return None
+    
+    def _combine_article_parts(self, parts: list) -> str:
+        """
+        Combine article parts and clean up formatting
+        
+        Args:
+            parts: List of article parts
+            
+        Returns:
+            Clean combined article text
+        """
+        if not parts:
+            return ""
+        
+        # Use only the first complete part to avoid duplication
+        # The first part should contain the complete article
+        combined = parts[0]
+        
+        # Clean up the combined text
+        combined = self._clean_article_text(combined)
+        return combined
+    
+    def _clean_article_text(self, text: str) -> str:
+        """
+        Clean up article text by removing extra separators and formatting
+        
+        Args:
+            text: Raw article text
+            
+        Returns:
+            Cleaned article text
+        """
+        import re
+        
+        # Remove multiple consecutive separators
+        text = re.sub(r'=+', '', text)
+        
+        # Remove extra whitespace
+        text = re.sub(r'\s+', ' ', text)
+        
+        # Remove bullet points that might be artifacts
+        text = re.sub(r'^•\s*', '', text, flags=re.MULTILINE)
+        
+        # Remove duplicate content by finding repeated patterns
+        # Split by common patterns and keep only unique parts
+        lines = text.split('.')
+        unique_lines = []
+        seen_content = set()
+        
+        for line in lines:
+            line = line.strip()
+            if line and line not in seen_content:
+                # Check if this line is not a duplicate of previous content
+                is_duplicate = False
+                for seen in seen_content:
+                    if len(line) > 20 and line in seen:
+                        is_duplicate = True
+                        break
+                    if len(seen) > 20 and seen in line:
+                        is_duplicate = True
+                        break
+                
+                if not is_duplicate:
+                    unique_lines.append(line)
+                    seen_content.add(line)
+        
+        # Rejoin the unique content
+        text = '. '.join(unique_lines)
+        
+        # Clean up the text
+        text = text.strip()
+        
+        return text
 
 
 class TelegramBot:
@@ -285,7 +404,8 @@ class TelegramBot:
             article = self.orchestrator.get_article_by_number(article_num)
             
             if article:
-                response = f"📚 **Статья {article_num}**\n\n{article}"
+                # Format article beautifully with structure
+                response = self._format_article_response(article_num, article)
                 await update.message.reply_text(response, parse_mode='Markdown')
             else:
                 await update.message.reply_text(
@@ -300,6 +420,122 @@ class TelegramBot:
             logger.error(f"Error in law command: {e}")
             await update.message.reply_text("❌ Произошла ошибка при получении статьи.")
     
+    def _format_article_response(self, article_num: int, article_text: str) -> str:
+        """
+        Format article response with beautiful structure
+        
+        Args:
+            article_num: Article number
+            article_text: Full article text
+            
+        Returns:
+            Formatted article response
+        """
+        # Clean up the article text
+        article_text = article_text.strip()
+        
+        # Remove the article header if it's duplicated
+        if article_text.startswith(f"Статья {article_num}"):
+            # Find the first period after the title
+            first_period = article_text.find('.', len(f"Статья {article_num}"))
+            if first_period != -1:
+                # Extract title and content
+                title_part = article_text[:first_period + 1]
+                content_part = article_text[first_period + 1:].strip()
+                
+                # Format beautifully
+                response_parts = []
+                response_parts.append(f"📚 **{title_part}**")
+                response_parts.append("")  # Empty line
+                
+                # Format content with proper paragraph breaks
+                if content_part:
+                    # Split by numbered points (1., 2., etc.)
+                    import re
+                    parts = re.split(r'(\d+\.)', content_part)
+                    
+                    formatted_content = []
+                    for i, part in enumerate(parts):
+                        if part.strip():
+                            if re.match(r'^\d+\.$', part.strip()):
+                                # This is a number, add it with proper spacing
+                                formatted_content.append(f"\n\n{part.strip()}")
+                            else:
+                                # This is content, add it
+                                formatted_content.append(part.strip())
+                    
+                    content_text = ''.join(formatted_content).strip()
+                    response_parts.append(content_text)
+                
+                # Add separator with proper spacing
+                response_parts.append("")  # Empty line before separator
+                response_parts.append("━━━━━━━━━━━━━━━━━━━")
+                
+                return '\n'.join(response_parts)
+        
+        # Fallback: simple formatting
+        return f"📚 **Статья {article_num}**\n\n{article_text}"
+    
+    def _extract_article_number(self, text: str) -> Optional[int]:
+        """
+        Extract article number from user query
+        
+        Args:
+            text: User query text
+            
+        Returns:
+            Article number if found, None otherwise
+        """
+        import re
+        
+        # Patterns to match article numbers - comprehensive list
+        patterns = [
+            # Basic patterns
+            r'статья\s+(\d+)',  # "статья 851"
+            r'статья\s*(\d+)',  # "статья851" or "статья 851"
+            r'статья\s*№\s*(\d+)',  # "статья №851"
+            r'статья\s+номер\s+(\d+)',  # "статья номер 851"
+            
+            # Action verbs with optional "мне"
+            r'дай\s+(?:мне\s+)?статью\s+(\d+)',  # "дай статью 851" or "дай мне статью 851"
+            r'покажи\s+(?:мне\s+)?статью\s+(\d+)',  # "покажи статью 851" or "покажи мне статью 851"
+            r'найди\s+(?:мне\s+)?статью\s+(\d+)',  # "найди статью 851" or "найди мне статью 851"
+            
+            # Conversational patterns
+            r'дайка\s+(?:мне\s+)?статью\s+(\d+)',  # "дайка статью 851" or "дайка мне статью 851"
+            r'покажи-ка\s+(?:мне\s+)?статью\s+(\d+)',  # "покажи-ка статью 851" or "покажи-ка мне статью 851"
+            r'что\s+там\s+со\s+статьей\s+(\d+)',  # "что там со статьей 851"
+            r'что\s+там\s+в\s+статье\s+(\d+)',  # "что там в статье 851"
+            
+            # Question patterns
+            r'где\s+статья\s+(\d+)\?',  # "где статья 851?"
+            r'что\s+в\s+статье\s+(\d+)\?',  # "что в статье 851?"
+            r'что\s+говорит\s+статья\s+(\d+)\?',  # "что говорит статья 851?"
+            r'что\s+написано\s+в\s+статье\s+(\d+)\?',  # "что написано в статье 851?"
+            r'можно\s+ли\s+посмотреть\s+статью\s+(\d+)\?',  # "можно ли посмотреть статью 851?"
+            
+            # Formal requests
+            r'пожалуйста,\s+покажите\s+статью\s+(\d+)',  # "пожалуйста, покажите статью 851"
+            r'не\s+могли\s+бы\s+вы\s+показать\s+статью\s+(\d+)\?',  # "не могли бы вы показать статью 851?"
+            r'можно\s+ли\s+получить\s+статью\s+(\d+)\?',  # "можно ли получить статью 851?"
+            
+            # Context patterns
+            r'мне\s+нужна\s+статья\s+(\d+)',  # "мне нужна статья 851"
+            r'хочу\s+посмотреть\s+статью\s+(\d+)',  # "хочу посмотреть статью 851"
+            r'интересует\s+статья\s+(\d+)',  # "интересует статья 851"
+            r'расскажи\s+про\s+статью\s+(\d+)',  # "расскажи про статью 851"
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, text.lower())
+            if match:
+                try:
+                    return int(match.group(1))
+                except ValueError:
+                    continue
+        
+        return None
+
     async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """
         Handle user messages
@@ -311,6 +547,15 @@ class TelegramBot:
         
         # Send typing indicator
         await update.message.chat.send_action(ChatAction.TYPING)
+        
+        # Check if this is a request for a specific article
+        article_num = self._extract_article_number(user_query)
+        if article_num:
+            logger.info(f"Detected article request: {article_num}")
+            # Simulate /law command with the extracted article number
+            context.args = [str(article_num)]
+            await self.law_command(update, context)
+            return
         
         # Process query through orchestrator
         response = await self.orchestrator.process_query(user_query, user_id)
