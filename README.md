@@ -6,7 +6,7 @@ Welcome to the MyzamAI workspace! This repository contains various AI and machin
 
 ## 📂 Projects
 
-### 🤖 LegalBot+
+### 🤖 MyzamAI
 **Location:** `legalbot/`
 
 A sophisticated multi-agent legal chatbot powered by free open-source LLMs. Provides legal consultations based on the Civil Code of the Kyrgyz Republic using RAG (Retrieval-Augmented Generation), FAISS vector search, and specialized AI agents.
@@ -105,16 +105,6 @@ General guidelines:
 
 ---
 
-## 🌟 Future Projects
-
-Stay tuned for more AI projects including:
-- Healthcare chatbots
-- Financial analysis tools
-- Educational AI assistants
-- And more...
-
----
-
 ## 📧 Contact
 
 - **Issues:** Open a GitHub issue
@@ -130,7 +120,5 @@ Stay tuned for more AI projects including:
 - The open-source community
 
 ---
-
-**Made with ❤️ and 🤖 AI**
 
 **MyzamAI © 2025**
