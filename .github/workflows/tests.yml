@@ -57,6 +57,12 @@ jobs:
         pytest --version
         echo "✅ Installation verified"
     
+    - name: 🔧 Set up environment variables
+      run: |
+        echo "TELEGRAM_BOT_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
+        echo "HUGGINGFACE_API_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
+        echo "✅ Environment variables set for testing"
+    
     - name: 🏗️ Build FAISS index (if needed)
       run: |
         if [ ! -f "storage/faiss_index/faiss_index.bin" ]; then
@@ -77,6 +83,7 @@ jobs:
           --junitxml=test-results-${{ matrix.test-type }}.xml \
           --maxfail=5 \
           --disable-warnings \
+          --asyncio-mode=auto \
           -v
         echo "✅ ${{ matrix.test-type }} tests completed"
     
@@ -117,6 +124,12 @@ jobs:
         python-version: "3.11"
         cache: 'pip'
     
+    - name: 🔧 Set up environment variables
+      run: |
+        echo "TELEGRAM_BOT_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
+        echo "HUGGINGFACE_API_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
+        echo "✅ Environment variables set for testing"
+    
     - name: 📚 Install dependencies
       run: |
         pip install -r requirements.txt
@@ -131,6 +144,7 @@ jobs:
           --junitxml=test-results.xml \
           --maxfail=1 \
           --disable-warnings \
+          --asyncio-mode=auto \
           -v
     
     - name: 📊 Upload coverage report
@@ -164,6 +178,12 @@ jobs:
         python-version: "3.11"
         cache: 'pip'
     
+    - name: 🔧 Set up environment variables
+      run: |
+        echo "TELEGRAM_BOT_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
+        echo "HUGGINGFACE_API_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
+        echo "✅ Environment variables set for testing"
+    
     - name: 📚 Install dependencies
       run: |
         pip install -r requirements.txt
@@ -178,6 +198,7 @@ jobs:
           --benchmark-save-data \
           --maxfail=1 \
           --disable-warnings \
+          --asyncio-mode=auto \
           -v
         echo "✅ Performance tests completed"
     
@@ -201,6 +222,12 @@ jobs:
       with:
         python-version: "3.11"
         cache: 'pip'
+    
+    - name: 🔧 Set up environment variables
+      run: |
+        echo "TELEGRAM_BOT_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
+        echo "HUGGINGFACE_API_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
+        echo "✅ Environment variables set for testing"
     
     - name: 📚 Install dependencies
       run: |
