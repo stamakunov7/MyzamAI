@@ -3,6 +3,7 @@
 Проверяет, что бот возвращает правильную статью по номеру
 """
 
+import pytest
 import asyncio
 import sys
 import os
@@ -22,6 +23,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+@pytest.mark.asyncio
 async def test_article_accuracy():
     """
     Тестирует точность извлечения статей
