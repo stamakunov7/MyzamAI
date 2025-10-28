@@ -2,6 +2,8 @@
 
 Pytest-compatible test suite for MyzamAI legal bot.
 
+> **📖 For detailed testing documentation, see [DEVELOPMENT.md](../DEVELOPMENT.md)**
+
 ## 📁 Structure
 
 ```

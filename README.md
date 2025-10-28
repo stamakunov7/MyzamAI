@@ -1,69 +1,36 @@
 # 🤖 MyzamAI
 
-**Multi-Agent Legal Chatbot powered by Meta Llama 3**
+**Multi-Agent Legal Chatbot powered by Hugging Face API**
 
-MyzamAI (from the Kyrgyz word «Мыйзам», meaning 'Law') is an AI-powered legal assistant that answers questions about the Civil Code of the Kyrgyz Republic using a multi-agent architecture, FAISS vector search, and Meta Llama 3 from Hugging Face.
+MyzamAI (from the Kyrgyz word «Мыйзам», meaning 'Law') is an AI-powered legal assistant that answers questions about the Civil Code of the Kyrgyz Republic using a multi-agent architecture, FAISS vector search, and Hugging Face Inference API.
 
 ---
 
 ## ⚡ Features
 
-- 🤖 **Meta Llama 3 (8B-Instruct)** - Centralized LLM for all agents
+- 🌐 **Hugging Face API** - Meta Llama 3 (8B-Instruct) via cloud inference
 - 🔍 **FAISS Vector Search** - Fast semantic document retrieval
 - 🎯 **6 Specialized Agents** - Legal Expert, Summarizer, Translator, Reviewer, UI, Retriever
 - 📱 **Telegram Bot** - User-friendly interface
 - 🌐 **Bilingual Support** - Russian/English with auto-detection
 - 💾 **Conversation Memory** - Remembers user interactions
 - ✅ **Quality Control** - Self-correction and review system
-- 🍎 **Apple Silicon Support** - Optimized for M1/M2 Macs
+- ⚡ **Zero Local GPU Load** - All processing happens on HF servers
 
 ---
 
-## 🏗️ Architecture
+## 🚀 Quick Start
 
-```
-User → Telegram Bot → Orchestrator
-                          ↓
-    ┌─────────────────────┴─────────────────────┐
-    │                                            │
-    ▼                                            ▼
-Translator → LawRetriever (FAISS) → Legal Expert (Llama 3)
-                                           ↓
-                                      Reviewer (Llama 3)
-                                           ↓
-                                    Summarizer (Llama 3)
-                                           ↓
-                                       UI Agent
-                                           ↓
-                                   Formatted Response
-```
-
-### Centralized LLM Manager
-
-All agents share a single **Meta Llama 3** instance via `core/llm_manager.py`:
-
-```python
-from core.llm_manager import llama
-
-# Used by: LegalExpertAgent, SummarizerAgent, ReviewerAgent
-response = llama(prompt)
-result = response[0]["generated_text"]
-```
-
----
-
-## 📦 Installation
-
-### Requirements
-
+### Prerequisites
 - Python 3.10+
-- 8GB+ RAM (16GB recommended)
-- CUDA GPU or Apple Silicon (optional, but recommended)
+- 2GB+ RAM (lightweight - no local models!)
+- Internet connection (for HF API)
+- Hugging Face API token
 
-### Setup
-
+### Installation
 ```bash
 # Clone repository
+git clone https://github.com/stamakunov7/MyzamAI.git
 cd MyzamAI
 
 # Create virtual environment
@@ -77,40 +44,31 @@ pip install -r requirements.txt
 python core/build_faiss_index.py
 ```
 
----
-
-## 🚀 Running the Bot
-
-### Set Telegram Token
-
+### Configuration
+Create a `.env` file:
 ```bash
-export TELEGRAM_BOT_TOKEN='your_token_from_botfather'
+# Telegram Bot Token (get from @BotFather)
+TELEGRAM_BOT_TOKEN=your_token_from_botfather
+
+# Hugging Face API Token (get from https://huggingface.co/settings/tokens)
+HUGGINGFACE_API_TOKEN=hf_your_token_here
 ```
 
-### Start Bot
-
+### Run Bot
 ```bash
 python bot/main.py
 ```
-
-The bot will:
-1. Load Meta Llama 3 (8B-Instruct) model
-2. Initialize all 6 agents
-3. Load FAISS index
-4. Start Telegram bot
 
 ---
 
 ## 💬 Usage
 
 ### Telegram Commands
-
 - `/start` - Start conversation
 - `/help` - Show help
 - `/law <number>` - Get specific article (e.g., `/law 22`)
 
 ### Example Query
-
 **User:**
 ```
 Могу ли я вернуть товар без чека?
@@ -140,20 +98,20 @@ The bot will:
 ## 🧠 Tech Stack
 
 ### Core
-- **LLM:** Meta Llama 3 (8B-Instruct) via Hugging Face Transformers
+- **LLM:** Meta Llama 3 (8B-Instruct) via Hugging Face Inference API
 - **Vector DB:** FAISS with sentence-transformers
 - **Framework:** Python 3.10+
 - **Bot API:** python-telegram-bot
 
-### Models
-- **Main LLM:** `meta-llama/Meta-Llama-3-8B-Instruct`
-- **Embeddings:** `sentence-transformers/all-MiniLM-L6-v2`
-- **Translation:** `Helsinki-NLP/opus-mt-ru-en` & `opus-mt-en-ru`
+### Models & Services
+- **Main LLM:** `meta-llama/Meta-Llama-3-8B-Instruct` (HF API)
+- **Embeddings:** `sentence-transformers/all-MiniLM-L6-v2` (local)
+- **Translation:** `Helsinki-NLP/opus-mt-ru-en` & `opus-mt-en-ru` (local)
 
-### Device Support
-- ✅ CUDA (NVIDIA GPUs)
-- ✅ Apple Silicon (MPS for M1/M2/M3)
-- ✅ CPU (fallback)
+### Infrastructure
+- ✅ **Cloud Inference** - All LLM processing on HF servers
+- ✅ **Local Embeddings** - Only sentence-transformers runs locally
+- ✅ **Lightweight** - Minimal resource usage
 
 ---
 
@@ -186,46 +144,22 @@ MyzamAI/
 ├── tests/                       # Test suite
 ├── config.py                    # Configuration & API tokens
 ├── requirements.txt             # Dependencies
-└── README.md
+├── README.md                    # This file
+└── DEVELOPMENT.md               # Technical documentation
 ```
-
----
-
-## 🔧 Configuration
-
-### Llama 3 Settings
-
-Edit `core/llm_manager.py`:
-
-```python
-MODEL_NAME = "meta-llama/Meta-Llama-3-8B-Instruct"
-
-llama = pipeline(
-    "text-generation",
-    model=model,
-    tokenizer=tokenizer,
-    max_new_tokens=512,      # Adjust response length
-    temperature=0.2,         # Lower = more focused
-    top_p=0.9               # Nucleus sampling
-)
-```
-
-### Device Selection
-
-The system automatically detects:
-1. **Apple Silicon (MPS)** - M1/M2/M3 Macs
-2. **CUDA** - NVIDIA GPUs
-3. **CPU** - Fallback
 
 ---
 
 ## 📊 Performance
 
-| Component | CPU | GPU | Apple Silicon |
-|-----------|-----|-----|---------------|
-| Model Loading | 2min | 30s | 45s |
-| Query Processing | 30-60s | 5-10s | 8-15s |
-| Memory Usage | 10GB | 8GB VRAM | 8GB unified |
+| Component | Startup Time | Query Processing | Resource Usage |
+|-----------|--------------|------------------|----------------|
+| Bot Initialization | < 5s | - | 200MB RAM |
+| FAISS Index Loading | < 2s | - | 100MB RAM |
+| HF API Connection | < 1s | 2-5s | 0MB (cloud) |
+| Embeddings (local) | < 3s | 0.5s | 500MB RAM |
+
+**Total Memory Usage:** ~800MB (vs 8GB+ for local models)
 
 ---
 
@@ -236,16 +170,21 @@ The system automatically detects:
 python core/build_faiss_index.py
 ```
 
-### "Out of memory"
-- Use smaller batch sizes
-- Enable CPU offloading in `llm_manager.py`
-- Reduce `max_new_tokens` in pipeline config
+### "Hugging Face API token not found"
+1. Go to https://huggingface.co/settings/tokens
+2. Create a new token (Read access)
+3. Add to `.env` file: `HUGGINGFACE_API_TOKEN=hf_your_token_here`
+4. Restart the bot
 
-### "Model download timeout"
-```bash
-export HF_HOME=/path/to/cache
-huggingface-cli login  # If using gated models
-```
+### "API rate limit exceeded"
+- Wait a few minutes and try again
+- Consider upgrading HF account for higher limits
+- Reduce `max_new_tokens` in config
+
+### "Telegram bot token not found"
+1. Message @BotFather on Telegram
+2. Create a new bot and get token
+3. Add to `.env` file: `TELEGRAM_BOT_TOKEN=your_token`
 
 ---
 
@@ -265,9 +204,9 @@ MIT License
 ## 🙏 Acknowledgments
 
 - **Meta AI** - Llama 3 model
-- **Hugging Face** - Transformers library
+- **Hugging Face** - Inference API & Transformers library
 - **Facebook AI** - FAISS vector search
 
 ---
 
-**MyzamAI v2.0 - Powered by Meta Llama 3** 🤖⚖️
+**MyzamAI v3.0 - Powered by Meta Llama3 (Hugging Face API)** 🤖⚖️
