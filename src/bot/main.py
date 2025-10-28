@@ -11,12 +11,13 @@ from pathlib import Path
 from datetime import datetime
 from typing import Optional
 
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+# Add project root to path for imports
+project_root = os.path.join(os.path.dirname(__file__), '..', '..')
+sys.path.insert(0, project_root)
 
 # Import configuration with .env support
 try:
-    import config
+    import config.config as config
     TELEGRAM_BOT_TOKEN = config.TELEGRAM_BOT_TOKEN
 except (ImportError, ValueError) as e:
     TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
@@ -33,8 +34,8 @@ from telegram.ext import (
 )
 from telegram.constants import ChatAction
 
-from core.law_retriever import LawRetriever
-from core.agents import (
+from src.core.law_retriever import LawRetriever
+from src.core.agents import (
     LegalExpertAgent,
     SummarizerAgent,
     TranslatorAgent,
@@ -73,7 +74,7 @@ class LegalBotOrchestrator:
         self.ui_agent = UserInterfaceAgent()
         
         # Memory for conversation history
-        self.memory_file = os.path.join(os.path.dirname(index_dir), 'memory.json')
+        self.memory_file = os.path.join(os.path.dirname(index_dir), '..', 'storage', 'memory.json')
         self.memory = self._load_memory()
         
         logger.info("✓ All agents initialized successfully")
@@ -582,13 +583,13 @@ def main():
     """
     # Get paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(script_dir)
-    index_dir = os.path.join(project_root, 'faiss_index')
+    project_root = os.path.join(script_dir, '..', '..')
+    index_dir = os.path.join(project_root, 'storage', 'faiss_index')
     
     # Check if FAISS index exists
     if not os.path.exists(os.path.join(index_dir, 'faiss_index.bin')):
         logger.error(
-            "FAISS index not found! Please run core/build_faiss_index.py first."
+            "FAISS index not found! Please run scripts/build_faiss_index.py first."
         )
         sys.exit(1)
     

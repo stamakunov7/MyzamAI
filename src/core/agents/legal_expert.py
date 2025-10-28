@@ -4,7 +4,7 @@ Uses centralized Meta Llama 3 from llm_manager
 """
 
 import logging
-from core.llm_manager import llama
+from src.core.llm_manager import llama
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

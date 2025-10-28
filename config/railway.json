@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "python core/build_faiss_index.py && python bot/main.py",
+    "startCommand": "python scripts/build_faiss_index.py && python src/bot/main.py",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }

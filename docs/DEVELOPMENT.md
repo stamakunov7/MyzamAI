@@ -9,13 +9,13 @@
 ### Quick Start
 ```bash
 # Basic article test
-python3 simple_test.py
+python scripts/simple_test.py
 
 # Comprehensive accuracy test
-python3 run_all_tests.py
+python scripts/run_all_tests.py
 
 # Pytest suite
-python3 run_pytest.py
+python scripts/run_pytest.py
 ```
 
 ### Test Structure
@@ -98,7 +98,7 @@ python core/build_faiss_index.py
 ### Railway Deployment
 ```json
 {
-  "startCommand": "python core/build_faiss_index.py && python bot/main.py",
+  "startCommand": "python scripts/build_faiss_index.py && python src/bot/main.py",
   "restartPolicyType": "ON_FAILURE",
   "restartPolicyMaxRetries": 10
 }
@@ -121,10 +121,13 @@ HUGGINGFACE_API_TOKEN=hf_your_token_here
 - **Framework**: Python 3.10+ with python-telegram-bot
 
 ### Code Organization
-- `core/` - Main business logic and agents
-- `bot/` - Telegram bot interface
+- `src/` - Main application code
+  - `bot/` - Telegram bot interface
+  - `core/` - Business logic and agents
+- `config/` - Configuration files
 - `data/` - Legal documents and processed chunks
-- `faiss_index/` - Vector database files
+- `storage/` - Database and persistent storage
+- `scripts/` - Utility scripts and tools
 - `tests/` - Comprehensive test suite
 
 ---

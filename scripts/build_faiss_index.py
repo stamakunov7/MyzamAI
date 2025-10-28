@@ -169,11 +169,11 @@ def main():
     """
     # Get paths relative to script location
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(script_dir)
+    project_root = os.path.join(script_dir, '..')
     
     # Use the new full civil code file from PDF processing
     data_path = os.path.join(project_root, 'data', 'civil_code_full.txt')
-    save_dir = os.path.join(project_root, 'faiss_index')
+    save_dir = os.path.join(project_root, 'storage', 'faiss_index')
     
     print("=" * 60)
     print("FAISS Index Builder for LegalBot+")
