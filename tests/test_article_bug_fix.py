@@ -8,10 +8,11 @@ import sys
 import os
 import logging
 
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+# Add project root to path for imports
+project_root = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, project_root)
 
-from bot.main import LegalBotOrchestrator
+from src.bot.main import LegalBotOrchestrator
 
 # Configure logging
 logging.basicConfig(
@@ -30,11 +31,11 @@ async def test_article_accuracy():
     # Get paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
-    index_dir = os.path.join(project_root, 'faiss_index')
+    index_dir = os.path.join(project_root, 'storage', 'faiss_index')
     
     # Check if FAISS index exists
     if not os.path.exists(os.path.join(index_dir, 'faiss_index.bin')):
-        print("❌ FAISS index not found! Please run core/build_faiss_index.py first.")
+        print("❌ FAISS index not found! Please run scripts/build_faiss_index.py first.")
         return
     
     # Initialize orchestrator

@@ -22,7 +22,7 @@ try:
 except (ImportError, ValueError) as e:
     TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
     if not TELEGRAM_BOT_TOKEN:
-        logger.warning(f"Configuration error: {e}")
+        print(f"Configuration error: {e}")
 
 from telegram import Update
 from telegram.ext import (

@@ -12,8 +12,9 @@ import os
 import sys
 from typing import Dict, List, Optional
 
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+# Add project root to path for imports
+project_root = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, project_root)
 
 
 @pytest.fixture(scope="session")
@@ -102,7 +103,7 @@ def faiss_index_dir():
     """
     test_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(test_dir)
-    index_dir = os.path.join(project_root, 'faiss_index')
+    index_dir = os.path.join(project_root, 'storage', 'faiss_index')
     
     if not os.path.exists(os.path.join(index_dir, 'faiss_index.bin')):
         pytest.skip(f"FAISS index not found: {index_dir}")

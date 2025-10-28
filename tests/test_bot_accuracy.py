@@ -11,11 +11,12 @@ import logging
 from typing import Dict, List, Tuple, Optional
 from datetime import datetime
 
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+# Add project root to path for imports
+project_root = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, project_root)
 
-from core.law_retriever import LawRetriever
-from core.agents import (
+from src.core.law_retriever import LawRetriever
+from src.core.agents import (
     LegalExpertAgent,
     SummarizerAgent,
     TranslatorAgent,
