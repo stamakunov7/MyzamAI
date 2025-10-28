@@ -4,9 +4,8 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "cd legalbot && python core/build_faiss_index.py && python bot/main.py",
+    "startCommand": "python core/build_faiss_index.py && python bot/main.py",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
 }
-
