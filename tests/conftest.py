@@ -125,7 +125,7 @@ def bot_orchestrator(faiss_index_dir):
         LegalBotOrchestrator: Initialized bot instance
     """
     try:
-        from bot.main import LegalBotOrchestrator
+        from src.bot.main import LegalBotOrchestrator
         orchestrator = LegalBotOrchestrator(faiss_index_dir)
         return orchestrator
     except Exception as e:

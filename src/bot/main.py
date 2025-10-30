@@ -24,7 +24,7 @@ except (ImportError, ValueError) as e:
     if not TELEGRAM_BOT_TOKEN:
         print(f"Configuration error: {e}")
 
-from telegram import Update
+from telegram import Update, ReplyKeyboardMarkup, KeyboardButton, BotCommand
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -132,7 +132,7 @@ class LegalBotOrchestrator:
         
         self._save_memory()
     
-    async def process_query(self, query: str, user_id: str = None) -> str:
+    async def process_query(self, query: str, user_id: Optional[str] = None) -> str:
         """
         Process user query through multi-agent pipeline
         
@@ -230,7 +230,8 @@ class LegalBotOrchestrator:
             
             # Collect all parts of the article with STRICT matching
             article_parts = []
-            for chunk in self.retriever.chunks:
+            chunks = self.retriever.chunks or []
+            for chunk in chunks:
                 chunk_clean = chunk.strip()
                 # STRICT: Must start with exact "Статья {article_num}" pattern
                 if chunk_clean.startswith(f"Статья {article_num}"):
@@ -366,7 +367,17 @@ class TelegramBot:
         """
         self.token = token
         self.orchestrator = orchestrator
-        self.application = Application.builder().token(token).build()
+        self.application = Application.builder().token(token).post_init(self._post_init).build()
+
+        # Prepare a persistent reply keyboard with core commands
+        self.keyboard = ReplyKeyboardMarkup(
+            keyboard=[
+                [KeyboardButton(text="/start"), KeyboardButton(text="/help")],
+                [KeyboardButton(text="/law 22")],  # sample usage for convenience
+            ],
+            resize_keyboard=True,
+            one_time_keyboard=False
+        )
         
         # Register handlers
         self.application.add_handler(CommandHandler("start", self.start_command))
@@ -375,20 +386,32 @@ class TelegramBot:
         self.application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.handle_message))
         
         logger.info("✓ Telegram bot initialized")
+
+    async def _post_init(self, app: Application) -> None:
+        """Register command list in Telegram so they appear as suggestions."""
+        try:
+            await app.bot.set_my_commands([
+                BotCommand(command="start", description="Начать работу с ботом"),
+                BotCommand(command="help", description="Показать справку"),
+                BotCommand(command="law", description="Получить статью: /law <номер>")
+            ])
+            logger.info("✓ Bot commands registered")
+        except Exception as e:
+            logger.warning(f"Could not register bot commands: {e}")
     
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """
         Handle /start command
         """
         welcome_message = self.orchestrator.ui_agent.format_welcome()
-        await update.message.reply_text(welcome_message, parse_mode='Markdown')
+        await self._safe_reply(update, welcome_message, parse_mode='Markdown', reply_markup=self.keyboard)
     
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """
         Handle /help command
         """
         help_message = self.orchestrator.ui_agent.format_help()
-        await update.message.reply_text(help_message, parse_mode='Markdown')
+        await self._safe_reply(update, help_message, parse_mode='Markdown', reply_markup=self.keyboard)
     
     async def law_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """
@@ -396,8 +419,10 @@ class TelegramBot:
         """
         try:
             if not context.args:
-                await update.message.reply_text(
-                    "Использование: /law <номер статьи>\nПример: /law 22"
+                await self._safe_reply(
+                    update,
+                    "Использование: /law <номер статьи>\nПример: /law 22",
+                    reply_markup=self.keyboard
                 )
                 return
             
@@ -407,19 +432,23 @@ class TelegramBot:
             if article:
                 # Format article beautifully with structure
                 response = self._format_article_response(article_num, article)
-                await update.message.reply_text(response, parse_mode='Markdown')
+                await self._safe_reply(update, response, parse_mode='Markdown', reply_markup=self.keyboard)
             else:
-                await update.message.reply_text(
-                    f"❌ Статья {article_num} не найдена в базе данных."
+                await self._safe_reply(
+                    update,
+                    f"❌ Статья {article_num} не найдена в базе данных.",
+                    reply_markup=self.keyboard
                 )
         
         except ValueError:
-            await update.message.reply_text(
-                "❌ Пожалуйста, укажите номер статьи числом.\nПример: /law 22"
+            await self._safe_reply(
+                update,
+                "❌ Пожалуйста, укажите номер статьи числом.\nПример: /law 22",
+                reply_markup=self.keyboard
             )
         except Exception as e:
             logger.error(f"Error in law command: {e}")
-            await update.message.reply_text("❌ Произошла ошибка при получении статьи.")
+            await self._safe_reply(update, "❌ Произошла ошибка при получении статьи.", reply_markup=self.keyboard)
     
     def _format_article_response(self, article_num: int, article_text: str) -> str:
         """
@@ -541,13 +570,17 @@ class TelegramBot:
         """
         Handle user messages
         """
-        user_query = update.message.text
-        user_id = str(update.effective_user.id)
+        message = update.effective_message
+        if not message or not message.text:
+            return
+        user_query = message.text
+        user_id = str(update.effective_user.id) if update.effective_user else None
         
         logger.info(f"Received query from user {user_id}: {user_query}")
         
         # Send typing indicator
-        await update.message.chat.send_action(ChatAction.TYPING)
+        if update.effective_chat:
+            await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
         
         # Check if this is a request for a specific article
         article_num = self._extract_article_number(user_query)
@@ -563,11 +596,11 @@ class TelegramBot:
         
         # Send response
         try:
-            await update.message.reply_text(response, parse_mode='Markdown')
+            await self._safe_reply(update, response, parse_mode='Markdown', reply_markup=self.keyboard)
         except Exception as e:
             # Fallback without markdown if parsing fails
             logger.warning(f"Markdown parsing failed: {e}")
-            await update.message.reply_text(response)
+            await self._safe_reply(update, response, reply_markup=self.keyboard)
     
     def run(self):
         """
@@ -575,6 +608,13 @@ class TelegramBot:
         """
         logger.info("🚀 Starting MyzamAI...")
         self.application.run_polling(allowed_updates=Update.ALL_TYPES)
+
+    async def _safe_reply(self, update: Update, text: str, parse_mode: Optional[str] = None, reply_markup=None):
+        """Reply to the update if a message is available."""
+        message = update.effective_message
+        if message is None:
+            return
+        await message.reply_text(text, parse_mode=parse_mode, reply_markup=reply_markup)
 
 
 def main():

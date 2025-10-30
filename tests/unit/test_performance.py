@@ -221,7 +221,7 @@ class TestPerformance:
         start_time = time.time()
         
         try:
-            from bot.main import LegalBotOrchestrator
+            from src.bot.main import LegalBotOrchestrator
             orchestrator = LegalBotOrchestrator(faiss_index_dir)
             
             end_time = time.time()
