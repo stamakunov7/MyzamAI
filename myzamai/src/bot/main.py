@@ -11,7 +11,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Optional
 
-# Add project root to path for imports
+# Add project root to path for imports (go up from src/bot/ to myzamai/)
 project_root = os.path.join(os.path.dirname(__file__), '..', '..')
 sys.path.insert(0, project_root)
 
@@ -666,7 +666,7 @@ def main():
     """
     Main entry point
     """
-    # Get paths
+    # Get paths (script is in myzamai/src/bot/, go up to myzamai/)
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.join(script_dir, '..', '..')
     index_dir = os.path.join(project_root, 'storage', 'faiss_index')

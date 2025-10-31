@@ -167,7 +167,7 @@ def main():
     """
     Main function to build FAISS index
     """
-    # Get paths relative to script location
+    # Get paths relative to script location (script is in myzamai/scripts/, go up to myzamai/)
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.join(script_dir, '..')
     

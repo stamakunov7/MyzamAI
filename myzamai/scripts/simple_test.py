@@ -18,8 +18,10 @@ def test_article_retrieval():
     print("🔍 Simple Test: Article 379 vs 380 Bug Fix")
     print("="*50)
     
-    # Path to the data file
-    data_file = os.path.join(os.path.dirname(__file__), 'data', 'civil_code_chunks.txt')
+    # Path to the data file (script is in myzamai/scripts/, go up to myzamai/ then to data/)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.join(script_dir, '..')
+    data_file = os.path.join(project_root, 'data', 'civil_code_chunks.txt')
     
     if not os.path.exists(data_file):
         print("❌ Data file not found!")

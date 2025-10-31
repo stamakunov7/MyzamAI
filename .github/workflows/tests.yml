@@ -32,7 +32,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('myzamai/**/requirements*.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
     
@@ -43,12 +43,12 @@ jobs:
     
     - name: 📚 Install core dependencies
       run: |
-        pip install -r requirements.txt
+        pip install -r myzamai/requirements.txt
         echo "✅ Core dependencies installed"
     
     - name: 🧪 Install test dependencies
       run: |
-        pip install -r requirements-test.txt
+        pip install -r myzamai/requirements-test.txt
         echo "✅ Test dependencies installed"
     
     - name: 🔍 Verify installation
@@ -65,9 +65,9 @@ jobs:
     
     - name: 🏗️ Build FAISS index (if needed)
       run: |
-        if [ ! -f "storage/faiss_index/faiss_index.bin" ]; then
+        if [ ! -f "myzamai/storage/faiss_index/faiss_index.bin" ]; then
           echo "⚙️ Building FAISS index..."
-          python scripts/build_faiss_index.py
+          python myzamai/scripts/build_faiss_index.py
           echo "✅ FAISS index built"
         else
           echo "✅ FAISS index already exists"
@@ -75,6 +75,7 @@ jobs:
     
     - name: 🧪 Run ${{ matrix.test-type }} tests
       run: |
+        cd myzamai
         echo "🚀 Running ${{ matrix.test-type }} tests..."
         python -m pytest -m ${{ matrix.test-type }} \
           --cov=src \
@@ -93,9 +94,9 @@ jobs:
       with:
         name: test-results-${{ matrix.test-type }}-py${{ matrix.python-version }}
         path: |
-          test-results-*.xml
-          coverage.xml
-          .coverage
+          myzamai/test-results-*.xml
+          myzamai/coverage.xml
+          myzamai/.coverage
     
     # Coverage upload is handled in the dedicated coverage job
     
@@ -132,11 +133,12 @@ jobs:
     
     - name: 📚 Install dependencies
       run: |
-        pip install -r requirements.txt
-        pip install -r requirements-test.txt
+        pip install -r myzamai/requirements.txt
+        pip install -r myzamai/requirements-test.txt
     
     - name: 🧪 Run all tests with coverage
       run: |
+        cd myzamai
         pytest --cov=src \
           --cov-report=html \
           --cov-report=xml \
@@ -151,12 +153,12 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: coverage-report
-        path: htmlcov/
+        path: myzamai/htmlcov/
     
     - name: 📈 Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:
-        file: ./coverage.xml
+        file: ./myzamai/coverage.xml
         flags: unittests
         name: codecov-umbrella
         fail_ci_if_error: true
@@ -186,11 +188,12 @@ jobs:
     
     - name: 📚 Install dependencies
       run: |
-        pip install -r requirements.txt
-        pip install -r requirements-test.txt
+        pip install -r myzamai/requirements.txt
+        pip install -r myzamai/requirements-test.txt
     
     - name: ⚡ Run performance tests
       run: |
+        cd myzamai
         echo "🚀 Running performance tests..."
         pytest -m performance \
           --benchmark-only \
@@ -231,7 +234,7 @@ jobs:
     
     - name: 📚 Install dependencies
       run: |
-        pip install -r requirements.txt
+        pip install -r myzamai/requirements.txt
         pip install safety bandit
     
     - name: 🔒 Run security scan

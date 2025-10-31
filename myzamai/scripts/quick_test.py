@@ -20,9 +20,10 @@ async def quick_test():
     print("🔍 Quick Test: Article 379 vs 380 Bug Fix")
     print("="*50)
     
-    # Get paths
+    # Get paths (script is in myzamai/scripts/, go up to myzamai/ then to storage/faiss_index/)
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    index_dir = os.path.join(script_dir, 'faiss_index')
+    project_root = os.path.join(script_dir, '..')
+    index_dir = os.path.join(project_root, 'storage', 'faiss_index')
     
     # Check if FAISS index exists
     if not os.path.exists(os.path.join(index_dir, 'faiss_index.bin')):

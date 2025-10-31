@@ -35,10 +35,10 @@ EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
 # Paths
 import os
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Go up from config/ to myzamai/
 DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
-FAISS_INDEX_DIR = os.path.join(PROJECT_ROOT, 'faiss_index')
-MEMORY_FILE = os.path.join(PROJECT_ROOT, 'memory.json')
+FAISS_INDEX_DIR = os.path.join(PROJECT_ROOT, 'storage', 'faiss_index')
+MEMORY_FILE = os.path.join(PROJECT_ROOT, 'storage', 'memory.json')
 
 # Bot Settings
 MAX_CONTEXT_LENGTH = 8192
