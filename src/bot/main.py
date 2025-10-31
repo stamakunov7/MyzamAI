@@ -243,7 +243,27 @@ class LegalBotOrchestrator:
                         if next_char.isdigit():
                             # This is a partial match (e.g., "Статья 37" matches "Статья 379")
                             continue
-                    article_parts.append(chunk_clean)
+                    
+                    # Additional check: skip if chunk is too short (just header like "Статья 1000" or "Статья 1000:")
+                    # Look for actual content after the article number
+                    pattern_with_space = f"Статья {article_num} "
+                    pattern_with_colon = f"Статья {article_num}:"
+                    pattern_with_dot = f"Статья {article_num}."
+                    
+                    # Check if chunk has content beyond just "Статья N" variants
+                    has_content = (
+                        chunk_clean.startswith(pattern_with_space) and len(chunk_clean) > len(pattern_with_space) + 10
+                    ) or (
+                        chunk_clean.startswith(pattern_with_colon) and len(chunk_clean) > len(pattern_with_colon) + 10
+                    ) or (
+                        chunk_clean.startswith(pattern_with_dot) and len(chunk_clean) > len(pattern_with_dot) + 10
+                    ) or (
+                        # Allow "Статья N" without space/colon if it has substantial following content
+                        len(chunk_clean) > len(pattern) + 15  # At least 15 chars after "Статья N"
+                    )
+                    
+                    if has_content:
+                        article_parts.append(chunk_clean)
             
             if article_parts:
                 # Combine all parts and clean up
@@ -291,9 +311,34 @@ class LegalBotOrchestrator:
         if not parts:
             return ""
         
-        # Use only the first complete part to avoid duplication
-        # The first part should contain the complete article
-        combined = parts[0]
+        # Find the longest/most complete part (likely contains full article)
+        # Or combine parts if they complement each other
+        if len(parts) == 1:
+            combined = parts[0]
+        else:
+            # Sort by length descending - longest part likely most complete
+            parts_sorted = sorted(parts, key=len, reverse=True)
+            
+            # Take the longest part that has substantial content (more than just header)
+            combined = None
+            for part in parts_sorted:
+                part_clean = part.strip()
+                # Check if part has content beyond just "Статья N" or "Статья N:"
+                if len(part_clean) > 20:  # Has substantial content
+                    # Extract article number from part
+                    import re
+                    match = re.match(r'Статья\s+(\d+)', part_clean)
+                    if match:
+                        # Check if part continues after article number
+                        article_num = match.group(1)
+                        pattern_len = len(f"Статья {article_num}")
+                        if len(part_clean) > pattern_len + 5:  # Has content after number
+                            combined = part
+                            break
+            
+            # Fallback: use longest part even if short
+            if combined is None:
+                combined = parts_sorted[0]
         
         # Clean up the combined text
         combined = self._clean_article_text(combined)

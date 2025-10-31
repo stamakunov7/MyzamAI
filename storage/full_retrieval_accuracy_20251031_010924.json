@@ -1,0 +1,2272 @@
+{
+  "total_tests": 119,
+  "passed": 119,
+  "partial": 0,
+  "not_found": 0,
+  "errors": 0,
+  "accuracy": 100.0,
+  "timestamp": "2025-10-31T01:09:24.086064",
+  "results": [
+    {
+      "article": 1,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 3
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 6
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 11,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 4
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 8
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 21,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 31,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 41,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 51,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 61,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 71,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 81,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 91,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 101,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 112,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 122,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 132,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 1
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 2
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 142,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 152,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 162,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 172,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 182,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 194,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 204,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 214,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 224,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 234,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 244,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 254,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 4
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 8
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 264,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 276,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 287,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 297,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 307,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 317,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 327,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 337,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 1
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 2
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 347,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 357,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 367,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 377,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 387,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 397,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 407,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 417,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 427,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 1
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 2
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 437,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 447,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 457,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 468,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 478,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 488,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 498,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 508,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 518,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 528,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 538,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 550,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 560,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 571,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 581,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 591,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 601,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 612,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 1
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 2
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 622,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 632,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 642,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 652,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 662,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 1
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 2
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 672,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 682,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 692,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 703,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 713,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 723,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 733,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 743,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 753,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 763,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 773,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 785,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 796,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 806,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 816,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 826,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 836,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 1
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 2
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 846,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 856,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 866,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 876,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 886,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 896,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 906,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 916,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 926,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 936,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 946,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 956,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 966,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 976,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 986,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 996,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1006,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1016,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1026,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1036,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1046,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 1
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 2
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1056,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1066,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1076,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1086,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1096,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1106,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1116,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1126,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1137,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1148,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1158,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1169,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1179,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1189,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    },
+    {
+      "article": 1200,
+      "results": {
+        "retriever": {
+          "status": "PASS",
+          "found": true,
+          "method": "retriever",
+          "parts_count": 2
+        },
+        "file": {
+          "status": "PASS",
+          "found": true,
+          "method": "file",
+          "matches": 4
+        }
+      },
+      "status": "PASS",
+      "found": true
+    }
+  ]
+}
