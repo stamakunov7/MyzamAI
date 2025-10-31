@@ -7,6 +7,8 @@ MyzamAI (from the Kyrgyz word «Мыйзам», meaning 'Law') is an AI-powered 
 **Link:**
 https://t.me/myzam_ai_bot
 
+**📚 Data Source:** The legal database contains the official Civil Code of the Kyrgyz Republic sourced directly from the official website of the Ministry of Justice of the Kyrgyz Republic.
+
 ## 📁 Project Structure
 
 ```
@@ -18,7 +20,7 @@ MyzamAI/
     │   ├── bot/               # Telegram bot interface
     │   └── core/              # Core business logic & agents
     ├── 📁 config/             # Configuration files
-    ├── 📁 data/               # Legal documents & data
+    ├── 📁 data/               # Official Civil Code of Kyrgyz Republic (Ministry of Justice)
     ├── 📁 storage/            # Database & persistent storage
     ├── 📁 scripts/            # Utility scripts & tools
     ├── 📁 tests/              # Test suite
@@ -48,6 +50,10 @@ MyzamAI/
    ```bash
    python myzamai/src/bot/main.py
    ```
+
+## 📚 Data Source
+
+The `data/` directory contains the **official Civil Code of the Kyrgyz Republic** obtained directly from the official website of the **Ministry of Justice of the Kyrgyz Republic (Минюст КР)**. This ensures accuracy and compliance with current legislation. The database includes **1,190+ articles** covering all aspects of civil law in Kyrgyzstan.
 
 ## 📖 Documentation
 

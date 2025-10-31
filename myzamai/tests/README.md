@@ -137,9 +137,9 @@ pytest --cov=. --cov-report=xml
 ```
 
 ### Coverage Targets
-- **Unit Tests**: >90% coverage
-- **Integration Tests**: >80% coverage
-- **Overall**: >85% coverage
+- **Unit Tests**: >95% coverage
+- **Integration Tests**: >85% coverage
+- **Overall**: >90% coverage (target: 95%)
 
 ## 🎯 Test Scenarios
 

@@ -32,9 +32,9 @@ tests/
 ```
 
 ### Test Categories
-- **Unit Tests**: 14 tests (parser, matcher, performance)
+- **Unit Tests**: 50+ tests (parser, matcher, performance, agents, retriever, LLM manager)
 - **Integration Tests**: 2 test files (article accuracy, bot integration)
-- **Coverage**: 85%+ code coverage
+- **Coverage**: 90%+ code coverage (target: 95%)
 
 ---
 
@@ -89,7 +89,9 @@ python core/build_faiss_index.py
 - **Startup Time**: < 5s (vs 2min with local models)
 - **Memory Usage**: ~800MB (vs 8GB+ with local models)
 - **Query Processing**: 2-5s via HF API
-- **Test Coverage**: 85%+
+- **Retrieval Accuracy**: 99.16% (1,180/1,190 articles tested)
+- **Test Coverage**: 90%+ (target: 95%)
+- **Article Database**: 1,190 unique articles from Kyrgyz Civil Code
 
 ---
 
