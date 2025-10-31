@@ -98,13 +98,19 @@ python core/build_faiss_index.py
 ## 🚀 Deployment
 
 ### Railway Deployment
-```json
-{
-  "startCommand": "python scripts/build_faiss_index.py && python src/bot/main.py",
-  "restartPolicyType": "ON_FAILURE",
-  "restartPolicyMaxRetries": 10
-}
+
+**Конфигурация:** `railway.json` в корне проекта
+
+**Start Command:**
+```bash
+cd myzamai && python scripts/build_faiss_index.py && python src/bot/main.py
 ```
+
+**Environment Variables (обязательные):**
+- `TELEGRAM_BOT_TOKEN` - токен от @BotFather
+- `HUGGINGFACE_API_TOKEN` - токен от Hugging Face
+
+📖 **Полная инструкция:** см. [RAILWAY_DEPLOY.md](../../RAILWAY_DEPLOY.md) в корне проекта
 
 ### Environment Variables
 ```bash

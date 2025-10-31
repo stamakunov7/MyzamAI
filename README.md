@@ -68,6 +68,17 @@ Start a conversation with the bot on Telegram:
 - `/help` - Show commands
 - `/law <number>` - Get specific article
 
+## 🚀 Deployment
+
+**Deployed on Railway:** Bot runs 24/7 with automatic restarts.
+
+📖 **Full deployment guide:** [RAILWAY_DEPLOY.md](RAILWAY_DEPLOY.md)
+
+**Quick setup:**
+1. Connect GitHub repo to Railway
+2. Add environment variables: `TELEGRAM_BOT_TOKEN`, `HUGGINGFACE_API_TOKEN`
+3. Railway auto-deploys using `railway.json`
+
 ## 🤝 Contributing
 
 See [DEVELOPMENT.md](myzamai/docs/DEVELOPMENT.md) for development guidelines.

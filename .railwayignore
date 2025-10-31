@@ -1,0 +1,49 @@
+# Railway ignore file
+# Files and directories that should NOT be deployed to Railway
+
+# Virtual environment
+venv/
+env/
+ENV/
+__pycache__/
+
+# Development files
+.git/
+.github/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Tests (not needed in production)
+tests/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Data files (already processed into FAISS index)
+# Note: Railway will need data/ for building FAISS index on first deploy
+# But we can optimize later
+
+# IDE files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files (Railway uses env vars from dashboard)
+.env
+.env.local
+
+# Large model files (using HF API, no local models)
+models/
+.cache/
+
