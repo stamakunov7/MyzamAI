@@ -1,0 +1,2 @@
+web: cd myzamai && python scripts/build_faiss_index.py && python src/bot/main.py
+
