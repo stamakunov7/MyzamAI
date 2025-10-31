@@ -1,0 +1,15 @@
+# Nixpacks configuration for Railway
+# This helps Railway detect Python project structure
+
+[phases.setup]
+nixPkgs = ["python311", "pip"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
+
+[phases.build]
+cmds = ["echo 'Build complete'"]
+
+[start]
+cmd = "cd myzamai && python scripts/build_faiss_index.py && python src/bot/main.py"
+
