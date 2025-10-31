@@ -4,6 +4,9 @@
 
 MyzamAI (from the Kyrgyz word «Мыйзам», meaning 'Law') is an AI-powered legal assistant that answers questions about the Civil Code of the Kyrgyz Republic.
 
+**Link:**
+https://t.me/myzam_ai_bot
+
 ## 📁 Project Structure
 
 ```
