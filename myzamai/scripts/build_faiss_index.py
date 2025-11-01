@@ -24,7 +24,12 @@ class FAISSIndexBuilder:
             model_name: HuggingFace model for embeddings
         """
         print(f"Loading embedding model: {model_name}")
+        print("(This may take 1-2 minutes to download the model...)")
+        import sys
+        sys.stdout.flush()
         self.model = SentenceTransformer(model_name)
+        print("✓ Model loaded successfully")
+        sys.stdout.flush()
         self.dimension = 384  # all-MiniLM-L6-v2 embedding size
         self.index = None
         self.chunks = []
@@ -74,14 +79,21 @@ class FAISSIndexBuilder:
             List of document chunks
         """
         print(f"Loading legal documents from: {data_path}")
+        import sys
+        sys.stdout.flush()
         
         with open(data_path, 'r', encoding='utf-8') as f:
             text = f.read()
+        
+        print(f"File loaded: {len(text)} characters")
+        sys.stdout.flush()
         
         # Split into articles for better granularity
         articles = []
         current_article = []
         
+        print("Processing articles...")
+        sys.stdout.flush()
         for line in text.split('\n'):
             if line.strip().startswith('Статья'):
                 if current_article:
@@ -94,6 +106,7 @@ class FAISSIndexBuilder:
             articles.append('\n'.join(current_article))
         
         print(f"Found {len(articles)} articles")
+        sys.stdout.flush()
         
         # Use articles as chunks directly (no further chunking needed)
         all_chunks = []
@@ -104,6 +117,7 @@ class FAISSIndexBuilder:
                 all_chunks.append(article)
         
         print(f"Total chunks after processing: {len(all_chunks)}")
+        sys.stdout.flush()
         return all_chunks
     
     def build_index(self, chunks: List[str]) -> faiss.Index:
@@ -117,14 +131,22 @@ class FAISSIndexBuilder:
             FAISS index
         """
         print("Generating embeddings...")
-        embeddings = self.model.encode(chunks, show_progress_bar=True)
+        print(f"Processing {len(chunks)} chunks (this is the slowest part, 5-10 minutes)...")
+        import sys
+        sys.stdout.flush()
+        embeddings = self.model.encode(chunks, show_progress_bar=True, batch_size=32)
+        print("✓ Embeddings generated")
+        sys.stdout.flush()
+        
         embeddings = np.array(embeddings).astype('float32')
         
         print(f"Building FAISS index with {len(embeddings)} vectors...")
+        sys.stdout.flush()
         index = faiss.IndexFlatL2(self.dimension)
         index.add(embeddings)
         
-        print(f"Index built successfully. Total vectors: {index.ntotal}")
+        print(f"✓ Index built successfully. Total vectors: {index.ntotal}")
+        sys.stdout.flush()
         return index
     
     def save_index(self, index: faiss.Index, chunks: List[str], save_dir: str):

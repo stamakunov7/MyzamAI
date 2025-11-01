@@ -649,10 +649,51 @@ class TelegramBot:
     
     def run(self):
         """
-        Start the bot
+        Start the bot with polling (long-running process for Railway)
+        Includes automatic reconnection on transient errors
         """
         logger.info("🚀 Starting MyzamAI...")
-        self.application.run_polling(allowed_updates=Update.ALL_TYPES)
+        max_restarts = 10
+        restart_count = 0
+        
+        while restart_count < max_restarts:
+            try:
+                # run_polling() blocks and keeps the process alive
+                # Railway will keep the container running as long as this process is active
+                logger.info(f"Starting polling (attempt {restart_count + 1}/{max_restarts})...")
+                self.application.run_polling(
+                    allowed_updates=Update.ALL_TYPES,
+                    drop_pending_updates=True,  # Ignore updates received while bot was offline
+                    close_loop=False  # Keep event loop running
+                )
+                # If we exit normally, break the loop
+                logger.info("Polling stopped normally")
+                break
+                
+            except KeyboardInterrupt:
+                logger.info("Bot stopped by user")
+                break
+            except Exception as e:
+                restart_count += 1
+                logger.error(f"Bot error (attempt {restart_count}/{max_restarts}): {e}", exc_info=True)
+                
+                if restart_count >= max_restarts:
+                    logger.critical(f"Max restarts ({max_restarts}) reached. Exiting.")
+                    raise  # Re-raise to trigger Railway restart
+                
+                # Wait before retrying (exponential backoff)
+                wait_time = min(2 ** restart_count, 60)  # Max 60 seconds
+                logger.info(f"Waiting {wait_time}s before restart...")
+                import time
+                time.sleep(wait_time)
+                
+                # Rebuild application for clean restart
+                logger.info("Rebuilding application...")
+                self.application = Application.builder().token(self.token).post_init(self._post_init).build()
+                self.application.add_handler(CommandHandler("start", self.start_command))
+                self.application.add_handler(CommandHandler("help", self.help_command))
+                self.application.add_handler(CommandHandler("law", self.law_command))
+                self.application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.handle_message))
 
     async def _safe_reply(self, update: Update, text: str, parse_mode: Optional[str] = None, reply_markup=None):
         """Reply to the update if a message is available."""
@@ -672,10 +713,13 @@ def main():
     index_dir = os.path.join(project_root, 'storage', 'faiss_index')
     
     # Check if FAISS index exists
-    if not os.path.exists(os.path.join(index_dir, 'faiss_index.bin')):
+    index_file = os.path.join(index_dir, 'faiss_index.bin')
+    if not os.path.exists(index_file):
         logger.error(
-            "FAISS index not found! Please run scripts/build_faiss_index.py first."
+            f"FAISS index not found at {index_file}!"
         )
+        logger.info("This should have been built by check_and_build_index.py")
+        logger.info("Please check the logs above for errors")
         sys.exit(1)
     
     # Check if bot token is available

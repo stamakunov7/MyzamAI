@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "cd myzamai && python scripts/build_faiss_index.py && python src/bot/main.py",
+    "startCommand": "cd myzamai && python scripts/check_and_build_index.py && python src/bot/main.py",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
