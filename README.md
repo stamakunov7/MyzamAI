@@ -7,7 +7,11 @@ MyzamAI (from the Kyrgyz word «Мыйзам», meaning 'Law') is an AI-powered 
 **Link:**
 https://t.me/myzam_ai_bot
 
-[![Demo Video]]((https://youtu.be/RXRBINTr_gk))
+## 🎥 Project Demo
+
+[![Watch the demo](https://img.youtube.com/vi/RXRBINTr_gk/maxresdefault.jpg)](https://youtu.be/RXRBINTr_gk)
+
+> Click the image to watch the full demo on YouTube.
 
 **📚 Data Source:** The legal database contains the official Civil Code of the Kyrgyz Republic sourced directly from the official website of the Ministry of Justice of the Kyrgyz Republic.
 
