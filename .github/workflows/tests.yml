@@ -59,6 +59,7 @@ jobs:
     
     - name: 🔧 Set up environment variables
       run: |
+        echo "PYTHONPATH=${{ github.workspace }}/myzamai" >> $GITHUB_ENV
         echo "TELEGRAM_BOT_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
         echo "HUGGINGFACE_API_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
         echo "✅ Environment variables set for testing"
@@ -127,6 +128,7 @@ jobs:
     
     - name: 🔧 Set up environment variables
       run: |
+        echo "PYTHONPATH=${{ github.workspace }}/myzamai" >> $GITHUB_ENV
         echo "TELEGRAM_BOT_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
         echo "HUGGINGFACE_API_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
         echo "✅ Environment variables set for testing"
@@ -182,6 +184,7 @@ jobs:
     
     - name: 🔧 Set up environment variables
       run: |
+        echo "PYTHONPATH=${{ github.workspace }}/myzamai" >> $GITHUB_ENV
         echo "TELEGRAM_BOT_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
         echo "HUGGINGFACE_API_TOKEN=dummy_token_for_testing" >> $GITHUB_ENV
         echo "✅ Environment variables set for testing"

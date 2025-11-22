@@ -134,8 +134,7 @@ MyzamAI/
 │
 ├── config/
 │   ├── config.py                    # Configuration & API tokens
-│   ├── railway.json                 # Railway deployment config
-│   └── pytest.ini                   # Test configuration
+│   └── railway.json                 # Railway deployment config
 │
 ├── data/
 │   ├── civil_code_full.txt          # Complete legal documents

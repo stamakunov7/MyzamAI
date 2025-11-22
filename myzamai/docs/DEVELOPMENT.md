@@ -8,14 +8,19 @@
 
 ### Quick Start
 ```bash
-# Basic article test
-python scripts/simple_test.py
+# Run all tests with pytest
+python scripts/run_pytest.py all
 
-# Comprehensive accuracy test
-python scripts/run_all_tests.py
+# Run specific test types
+python scripts/run_pytest.py unit          # Unit tests only
+python scripts/run_pytest.py integration  # Integration tests only
+python scripts/run_pytest.py coverage     # With coverage report
 
-# Pytest suite
-python scripts/run_pytest.py
+# Or use pytest directly
+cd myzamai
+pytest tests/                             # All tests
+pytest tests/unit/                        # Unit tests
+pytest tests/integration/                 # Integration tests
 ```
 
 ### Test Structure
@@ -56,7 +61,10 @@ tests/
 
 **Solution**:
 ```bash
-python core/build_faiss_index.py
+cd myzamai
+python scripts/check_and_build_index.py  # Smart builder (checks if exists)
+# OR
+python scripts/build_faiss_index.py     # Force rebuild
 ```
 
 ### Telegram Bot Issues
@@ -103,7 +111,7 @@ python core/build_faiss_index.py
 
 **Start Command:**
 ```bash
-cd myzamai && python scripts/build_faiss_index.py && python src/bot/main.py
+cd myzamai && python scripts/check_and_build_index.py && python src/bot/main.py
 ```
 
 **Environment Variables (обязательные):**
