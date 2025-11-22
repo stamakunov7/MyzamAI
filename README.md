@@ -91,4 +91,4 @@ See [DEVELOPMENT.md](myzamai/docs/DEVELOPMENT.md) for development guidelines.
 
 ---
 
-**MyzamAI v3.0 - Powered by Meta Llama3 (Hugging Face API)** 🤖⚖️
+**MyzamAI - Powered by Meta Llama3 (Hugging Face API)** 🤖⚖️
